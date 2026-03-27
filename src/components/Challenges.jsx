@@ -2,13 +2,15 @@ import { useState } from 'react'
 import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
   aiChallenges, zkChallenges, devopsChallenges, designChallenges,
-  tsChallenges, securityChallenges, sqlChallenges, archChallenges
+  tsChallenges, securityChallenges, sqlChallenges, archChallenges,
+  solidityChallenges, mathChallenges
 } from '../data/data'
 
 const ALL = [
   ...jsChallenges, ...goChallenges, ...pythonChallenges, ...rustChallenges,
   ...tsChallenges, ...aiChallenges, ...zkChallenges, ...devopsChallenges,
-  ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges
+  ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
+  ...solidityChallenges, ...mathChallenges
 ]
 
 const GROUPS = [
@@ -31,6 +33,8 @@ const GROUPS = [
   },
   {
     label: 'Emerging Tech', items: [
+      { id: 'math',   label: 'Math & ML',      icon: '∑',  count: mathChallenges.length,  data: mathChallenges },
+      { id: 'solidity',label: 'Solidity',      icon: '💎', count: solidityChallenges.length,  data: solidityChallenges },
       { id: 'ai',     label: 'AI & Prompts',   icon: '🤖', count: aiChallenges.length,    data: aiChallenges },
       { id: 'zk',     label: 'ZK Proofs',      icon: '🔐', count: zkChallenges.length,    data: zkChallenges },
       { id: 'design', label: 'System Design',  icon: '🏗️', count: designChallenges.length, data: designChallenges },
@@ -44,7 +48,8 @@ function ChallengeItem({ ch }) {
   const langMap = {
     JS:'badge-accent',Go:'badge-green',Python:'badge-python',Rust:'badge-rust',
     TS:'badge-ts',AI:'badge-ai',ZK:'badge-zk',DevOps:'badge-devops',
-    Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch'
+    Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
+    Solidity:'badge-solidity', 'Math/ML':'badge-math'
   }
   return (
     <div className={`challenge-item${open?' expanded':''}`} onClick={() => setOpen(v=>!v)}>

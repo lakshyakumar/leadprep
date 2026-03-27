@@ -228,6 +228,9 @@ body {
 .cat-pill-count { background: rgba(255,255,255,.12); border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 700; }
 .cat-pill.active .cat-pill-count { background: rgba(0,0,0,.2); }
 
+.badge-solidity { background: rgba(99, 102, 241, 0.1); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.2); }
+.badge-math { background: rgba(236, 72, 153, 0.1); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.2); }
+
 /* CHALLENGES */
 .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 .filter-btn {

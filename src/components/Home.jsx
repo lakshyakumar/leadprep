@@ -1,7 +1,20 @@
+import {
+  jsChallenges, goChallenges, pythonChallenges, rustChallenges,
+  tsChallenges, aiChallenges, zkChallenges, devopsChallenges,
+  designChallenges, securityChallenges, sqlChallenges, archChallenges,
+  solidityChallenges
+} from '../data/data'
+
+const totalChallenges = 
+  jsChallenges.length + goChallenges.length + pythonChallenges.length + rustChallenges.length +
+  tsChallenges.length + aiChallenges.length + zkChallenges.length + devopsChallenges.length +
+  designChallenges.length + securityChallenges.length + sqlChallenges.length + archChallenges.length +
+  solidityChallenges.length
+
 const features = [
   { icon: '📅', title: '7-Day Calendar', body: 'Day-by-day schedule with morning, afternoon, and evening sessions. Highest-ROI topics first.', section: 'calendar' },
   { icon: '🗺️', title: 'Interview Roadmap', body: '8 interview categories broken down: what\'s evaluated, questions asked, how to answer excellently.', section: 'roadmap' },
-  { icon: '⚡', title: '200 Coding Challenges', body: '50 JavaScript + 50 Golang + 50 Python + 50 Rust. Organized by difficulty. Language-specific patterns for each.', section: 'challenges' },
+  { icon: '⚡', title: `${totalChallenges} Coding Challenges`, body: 'JavaScript, Golang, Python, Rust, TS, Solidity, Security, DevOps, Architecture, and more. Organized by difficulty.', section: 'challenges' },
   { icon: '📐', title: 'Coding Standards', body: 'Clean Code, SOLID, DRY/KISS/YAGNI, JS best practices, idiomatic Go, API design.', section: 'standards' },
   { icon: '🤝', title: 'Pair Programming', body: 'How to communicate, clarify, structure solutions aloud, handle feedback, recover when stuck.', section: 'pairing' },
   { icon: '👔', title: 'Leadership Prep', body: 'STAR stories, team leadership, technical decisions, conflict resolution, hiring, and culture.', section: 'leadership' },
@@ -18,7 +31,7 @@ export default function Home({ onNavigate }) {
         <p>A complete, execution-focused preparation system for Engineering Leadership interviews. Covering technical depth, architecture breadth, and leadership maturity.</p>
         <div className="hero-stats">
           <div className="stat"><div className="stat-num">7</div><div className="stat-label">Days</div></div>
-          <div className="stat"><div className="stat-num">200</div><div className="stat-label">Challenges</div></div>
+          <div className="stat"><div className="stat-num">{totalChallenges}</div><div className="stat-label">Challenges</div></div>
           <div className="stat"><div className="stat-num">8</div><div className="stat-label">Interview Types</div></div>
           <div className="stat"><div className="stat-num">50+</div><div className="stat-label">STAR Stories</div></div>
         </div>

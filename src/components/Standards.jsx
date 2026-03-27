@@ -265,6 +265,22 @@ const LANGS = [
       { title: 'Async/Await', body: 'Async functions return Future — they are lazy until polled. Use tokio or async-std as the runtime executor. Use tokio::spawn for concurrent tasks. Never call blocking code in an async context.' },
     ],
   },
+  {
+    id: 'solidity', label: 'Solidity', icon: '💎',
+    docs: [
+      { label: 'Solidity Docs', url: 'https://docs.soliditylang.org/' },
+      { label: 'Solidity by Example', url: 'https://solidity-by-example.org/' },
+      { label: 'Smart Contract Best Practices', url: 'https://consensys.github.io/smart-contract-best-practices/' },
+      { label: 'Ethernaut (Security)', url: 'https://ethernaut.openzeppelin.com/' },
+    ],
+    sections: [
+      { title: 'Security First', body: 'Smart contracts handle money and cannot be easily patched. Exploit costs are catastrophic. Always use Checks-Effects-Interactions (CEI) to prevent reentrancy. Pull over push payments.' },
+      { title: 'Gas Optimization', body: 'Storage (SSTORE) is the most expensive operation. Pack variables in structs. Use memory/calldata instead of storage where possible. Cache state variables in memory for loops.' },
+      { title: 'Upgradeability', body: 'Contracts are immutable by default. Use Proxy patterns (UUPS or Transparent) via OpenZeppelin if business logic must change. Beware of storage collisions when upgrading.' },
+      { title: 'Access Control', body: 'Never leave state-mutating functions public without auth. Use OpenZeppelin Ownable for simple admin rights, or AccessControl for role-based permissions.' },
+      { title: 'Testing (Foundry)', body: 'Unit test 100% of branches. Write invariant tests (properties that must always hold true, e.g., Total Supply == Sum of Balances) and fuzz tests to catch edge cases.' },
+    ],
+  },
 ]
 
 const OPS = [
