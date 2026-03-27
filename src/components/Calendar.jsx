@@ -4,9 +4,9 @@ const days = [
   {
     num: 1, theme: 'Foundation Sprint', sub: 'DSA + Behavioral Setup',
     sessions: [
-      { time: '☀️ Morning · 8–10am', content: <><strong>DSA Refresh:</strong> Arrays, Strings, HashMaps, Two Pointers. Solve 5 Easy JS challenges. Review Big-O notation basics.</> },
+      { time: '☀️ Morning · 8–10am', content: <><strong>DSA Refresh:</strong> Arrays, Strings, HashMaps, Two Pointers. Solve 5 Easy coding challenges. Review Big-O notation basics.</> },
       { time: '🌤 Afternoon · 12–2pm', content: <><strong>Behavioral Framework:</strong> Write 10 STAR stories from your career. Cover leadership wins, failures, conflict, hiring decisions, delivery crises.</> },
-      { time: '🌙 Evening · 7–9pm', content: <><strong>Go Fundamentals:</strong> Slices, maps, error handling, goroutines basics. Solve 5 Easy Go challenges. Review idiomatic Go patterns.</> },
+      { time: '🌙 Evening · 7–9pm', content: <><strong>Language Fundamentals:</strong> Collections, error handling, and concurrency basics. Solve 5 Easy coding challenges. Review idiomatic language patterns.</> },
     ]
   },
   {
@@ -14,15 +14,15 @@ const days = [
     sessions: [
       { time: '☀️ Morning · 8–10am', content: <><strong>System Design Framework:</strong> Study RESHADED method. Practice URL Shortener + Chat System. Capacity estimation drills.</> },
       { time: '🌤 Afternoon · 12–2pm', content: <><strong>Distributed Systems:</strong> CAP theorem, consistency models, partitioning, replication, eventual consistency. Study Kafka, Redis, PostgreSQL tradeoffs.</> },
-      { time: '🌙 Evening · 7–9pm', content: <><strong>Coding:</strong> 5 Medium JS (Stacks, Queues, Sliding Window). Practice explaining solutions out loud (pair programming mindset).</> },
+      { time: '🌙 Evening · 7–9pm', content: <><strong>Coding:</strong> 5 Medium challenges (Stacks, Queues, Sliding Window). Practice explaining solutions out loud (pair programming mindset).</> },
     ]
   },
   {
     num: 3, theme: 'Trees & Graphs', sub: 'DSA Mid-Difficulty',
     sessions: [
-      { time: '☀️ Morning · 8–10am', content: <><strong>Trees + Graphs:</strong> BFS, DFS, binary trees, BST, trie basics. Solve 5 Medium JS tree problems. Draw solutions on paper first.</> },
+      { time: '☀️ Morning · 8–10am', content: <><strong>Trees + Graphs:</strong> BFS, DFS, binary trees, BST, trie basics. Solve 5 Medium tree problems. Draw solutions on paper first.</> },
       { time: '🌤 Afternoon · 12–2pm', content: <><strong>Leadership Deep Dive:</strong> Underperformer management, mentoring frameworks (SBI feedback), delegation model, performance reviews. Prepare 5 leadership stories.</> },
-      { time: '🌙 Evening · 7–9pm', content: <><strong>Go Mid Challenges:</strong> 5 Medium Go problems (trees, linked lists, sorting). Review Go interfaces, embedding, goroutines with WaitGroups.</> },
+      { time: '🌙 Evening · 7–9pm', content: <><strong>Medium Challenges:</strong> 5 Medium problems (trees, linked lists, sorting). Review language-specific features (e.g., async, interfaces, generics).</> },
     ]
   },
   {
@@ -30,14 +30,14 @@ const days = [
     sessions: [
       { time: '☀️ Morning · 8–10am', content: <><strong>Advanced System Design:</strong> Design a search autocomplete + rate limiter + notification system. Focus on tradeoff articulation.</> },
       { time: '🌤 Afternoon · 12–2pm', content: <><strong>Execution & Delivery:</strong> OKRs, sprint planning, technical roadmaps, incident management (DORA metrics), post-mortems. Prepare execution story.</> },
-      { time: '🌙 Evening · 7–9pm', content: <><strong>DP + Recursion:</strong> 5 Medium JS dynamic programming (fibonacci, knapsack, LCS). Focus on memoization pattern.</> },
+      { time: '🌙 Evening · 7–9pm', content: <><strong>DP + Recursion:</strong> 5 Medium dynamic programming challenges (fibonacci, knapsack, LCS). Focus on memoization pattern.</> },
     ]
   },
   {
     num: 5, theme: 'Hard Mode', sub: 'Advanced DSA + Go Concurrency',
     sessions: [
-      { time: '☀️ Morning · 8–10am', content: <><strong>Hard JS Challenges:</strong> 5 Hard problems (Heaps, advanced DP, graphs). Strict 25-min per problem. Time pressure training.</> },
-      { time: '🌤 Afternoon · 12–2pm', content: <><strong>Go Concurrency:</strong> Channels, select, mutex, context, worker pools, pipeline patterns. Solve 3 concurrency challenges.</> },
+      { time: '☀️ Morning · 8–10am', content: <><strong>Hard Challenges:</strong> 5 Hard problems (Heaps, advanced DP, graphs). Strict 25-min per problem. Time pressure training.</> },
+      { time: '🌤 Afternoon · 12–2pm', content: <><strong>Concurrency & Systems:</strong> Threads, mutexes, async/await, worker pools, pipeline patterns. Solve 3 concurrency challenges.</> },
       { time: '🌙 Evening · 7–9pm', content: <><strong>Pair Programming Practice:</strong> Full mock pair session. Code out loud for 60 mins. Review coding standards, clean code principles.</> },
     ]
   },
@@ -46,7 +46,7 @@ const days = [
     sessions: [
       { time: '☀️ Morning · 9–11am', content: <><strong>Mock System Design:</strong> Full 45-min timed session. Design Twitter feed or YouTube. Self-evaluate on structure, tradeoffs, depth.</> },
       { time: '🌤 Afternoon · 1–3pm', content: <><strong>Mock Behavioral:</strong> Record yourself answering 10 leadership questions. Review for specificity, conciseness, impact quantification.</> },
-      { time: '🌙 Evening · 6–8pm', content: <><strong>Weak Area Patch:</strong> Identify 3 weak areas from mocks. Focus 60 min on each. Review Go hard challenges.</> },
+      { time: '🌙 Evening · 6–8pm', content: <><strong>Weak Area Patch:</strong> Identify 3 weak areas from mocks. Focus 60 min on each. Review hard challenges.</> },
     ]
   },
   {
@@ -62,8 +62,8 @@ const days = [
 const compressedRows = [
   { day: 'Day 1', focus: '🔴 STAR Stories', what: 'Write 8 STAR stories covering: leadership win, failure recovery, conflict, delivery crisis, mentoring, hiring, scope creep, cross-team alignment' },
   { day: 'Day 2', focus: '🏗️ System Design', what: 'Learn RESHADED framework. Practice designing 1 large system from scratch (URL shortener or Chat App). Focus on tradeoffs.' },
-  { day: 'Day 3', focus: '💻 JS Coding', what: 'Solve 8 JS challenges: 4 Easy + 3 Medium + 1 Hard. Speak solutions aloud. Time yourself at 20 min per problem.' },
-  { day: 'Day 4', focus: '🦫 Go Coding', what: 'Solve 8 Go challenges: 4 Easy + 3 Medium + 1 Hard. Review Go error handling and goroutine basics.' },
+  { day: 'Day 3', focus: '💻 Coding Basics', what: 'Solve 8 coding challenges: 4 Easy + 3 Medium + 1 Hard. Speak solutions aloud. Time yourself at 20 min per problem.' },
+  { day: 'Day 4', focus: '🦫 Advanced Coding', what: 'Solve 8 advanced challenges: 4 Easy + 3 Medium + 1 Hard. Review language-specific error handling and concurrency basics.' },
   { day: 'Day 5', focus: '👔 Leadership Depth', what: 'Prepare 5 more STAR stories. Study: underperformer management, delegation, technical vision, hiring bar, OKRs.' },
   { day: 'Day 6', focus: '🎭 Mock Round', what: 'Full 45-min mock system design. Record yourself. Then 45-min behavioral mock with 5 questions. Self-score both.' },
   { day: 'Day 7', focus: '🧘 Integration', what: 'Skim all notes. Review playbook. Prepare your questions to ask. Rest.' },
@@ -134,13 +134,13 @@ export default function Calendar() {
           <div className="card-body" style={{marginBottom:14}}>If you have minimal time, solve these 20 challenges — they cover the highest-frequency patterns seen in engineering leadership interviews.</div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
             <div>
-              <div className="roadmap-sub-label">JavaScript (10)</div>
+              <div className="roadmap-sub-label">Core Concepts (10)</div>
               <ul className="qs-list">
                 {['Two Sum (Hash Map)','Valid Parentheses (Stack)','Longest Substring Without Repeat','Merge Intervals','LRU Cache','Binary Tree Level Order Traversal','Clone Graph','Coin Change (DP)','Word Break','Design Rate Limiter'].map(q => <li key={q}>{q}</li>)}
               </ul>
             </div>
             <div>
-              <div className="roadmap-sub-label">Golang (10)</div>
+              <div className="roadmap-sub-label">Advanced/Systems (10)</div>
               <ul className="qs-list">
                 {['Reverse Linked List','Find Kth Largest Element (Heap)','Number of Islands (BFS/DFS)','Implement a Stack with Min','Concurrent Web Crawler','Product of Array Except Self','Jump Game (Greedy)','Serialize/Deserialize Binary Tree','Trie: Insert and Search','Worker Pool Pattern'].map(q => <li key={q}>{q}</li>)}
               </ul>

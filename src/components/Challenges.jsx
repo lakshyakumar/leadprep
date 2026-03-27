@@ -68,6 +68,24 @@ function ChallengeItem({ ch }) {
               <div className="ch-detail-val">{ch.concepts.split(', ').map(c=><span key={c} className="tag">{c}</span>)}</div>
             </div>
             <div style={{gridColumn:'1/-1'}}><div className="ch-detail-label">Why It Matters</div><div className="ch-detail-val">{ch.why}</div></div>
+            {ch.examples && (
+              <div style={{gridColumn:'1/-1', marginTop: '12px'}}>
+                <div className="ch-detail-label">Examples / Test Scenarios</div>
+                <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.examples}</div>
+              </div>
+            )}
+            {ch.testInputs && (
+              <div style={{gridColumn:'1/-1', marginTop: '12px'}}>
+                <div className="ch-detail-label">Test Inputs & Answers</div>
+                <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.testInputs}</div>
+              </div>
+            )}
+            {ch.explanation && (
+              <div style={{gridColumn:'1/-1', marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px'}}>
+                <div className="ch-detail-label" style={{color: '#a0aec0'}}>Key Takeaway / Explanation</div>
+                <div className="ch-detail-val" style={{color: '#e2e8f0', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.5'}}>{ch.explanation}</div>
+              </div>
+            )}
           </div>
         </div>
       )}
