@@ -2,14 +2,14 @@ import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
   tsChallenges, aiChallenges, zkChallenges, devopsChallenges,
   designChallenges, securityChallenges, sqlChallenges, archChallenges,
-  solidityChallenges
+  solidityChallenges, dynamicProgrammingChallenges
 } from '../data/data'
 
 const totalChallenges = 
   jsChallenges.length + goChallenges.length + pythonChallenges.length + rustChallenges.length +
   tsChallenges.length + aiChallenges.length + zkChallenges.length + devopsChallenges.length +
   designChallenges.length + securityChallenges.length + sqlChallenges.length + archChallenges.length +
-  solidityChallenges.length
+  solidityChallenges.length + dynamicProgrammingChallenges.length
 
 const features = [
   { icon: '📅', title: '7-Day Calendar', body: 'Day-by-day schedule with morning, afternoon, and evening sessions. Highest-ROI topics first.', section: 'calendar' },
