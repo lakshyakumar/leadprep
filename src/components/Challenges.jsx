@@ -53,12 +53,15 @@ function ChallengeItem({ ch }) {
     Solidity:'badge-solidity', 'Math/ML':'badge-math', DP: 'badge-accent'
   }
   return (
-    <div className={`challenge-item${open?' expanded':''}`} onClick={() => setOpen(v=>!v)}>
-      <div className="ch-row">
+    <div className={`challenge-item${open?' expanded':''}`}>
+      <div className="ch-row" onClick={() => setOpen(v=>!v)} style={{ cursor: 'pointer' }}>
         <span className="ch-num">#{ch.id}</span>
         <span className="ch-title">{ch.title}</span>
         <span className={`badge ${langMap[ch.lang]||'badge-accent'}`}>{ch.lang}</span>
         <span className={`badge ${diffClass}`}>{ch.diff}</span>
+        <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--text2)' }}>
+          {open ? '▲' : '▼'}
+        </span>
       </div>
       {open && (
         <div className="ch-detail show">
