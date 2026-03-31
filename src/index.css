@@ -604,3 +604,106 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; 
   .features-grid { gap: 8px; }
   .hero-stats { gap: 14px; }
 }
+
+/* SCRATCHPAD */
+.scratchpad-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.scratchpad-toggle {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.scratchpad-container.open .scratchpad-toggle {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.scratchpad-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(124,106,255,0.25);
+  border-color: var(--accent);
+}
+.scratchpad-panel {
+  width: 380px;
+  height: 450px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (max-width: 600px) {
+  .scratchpad-panel {
+    width: calc(100vw - 48px);
+    height: 350px;
+  }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.scratchpad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.scratchpad-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.clear-btn {
+  background: rgba(255,107,107,0.1);
+  color: var(--accent2);
+  border: 1px solid rgba(255,107,107,0.2);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.clear-btn:hover {
+  background: rgba(255,107,107,0.2);
+}
+.scratchpad-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 16px 18px;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  outline: none;
+}
+.scratchpad-textarea::placeholder {
+  color: var(--text2);
+  opacity: 0.6;
+}
+

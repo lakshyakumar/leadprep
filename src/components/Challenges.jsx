@@ -75,21 +75,24 @@ function ChallengeItem({ ch }) {
       {open && (
         <div className="ch-detail show">
           <div className="ch-detail-grid">
-            <div><div className="ch-detail-label">Challenge</div><div className="ch-detail-val">{ch.problem}</div></div>
+            <div style={{gridColumn: '1/-1', marginBottom: '8px'}}>
+              <div className="ch-detail-label" style={{fontSize:'12px', color:'var(--accent)', fontWeight:'700'}}>Problem Statement</div>
+              <div className="ch-detail-val" style={{fontSize:'15px', lineHeight:'1.6', marginTop:'4px'}}>{ch.problem}</div>
+            </div>
             <div>
               <div className="ch-detail-label">Concepts</div>
               <div className="ch-detail-val">{ch.concepts.split(', ').map(c=><span key={c} className="tag">{c}</span>)}</div>
             </div>
             <div style={{gridColumn:'1/-1'}}><div className="ch-detail-label">Why It Matters</div><div className="ch-detail-val">{ch.why}</div></div>
             {ch.examples && (
-              <div style={{gridColumn:'1/-1', marginTop: '12px'}}>
-                <div className="ch-detail-label">Examples / Test Scenarios</div>
+              <div style={{gridColumn:'1/-1', marginTop: '4px'}}>
+                <div className="ch-detail-label" style={{color: 'var(--accent3)'}}>Examples, Edge Cases & Test Scenarios</div>
                 <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.examples}</div>
               </div>
             )}
             {ch.testInputs && (
-              <div style={{gridColumn:'1/-1', marginTop: '12px'}}>
-                <div className="ch-detail-label">Test Inputs & Answers</div>
+              <div style={{gridColumn:'1/-1', marginTop: '4px'}}>
+                <div className="ch-detail-label" style={{color: 'var(--accent4)'}}>Test Inputs, Answers & Edge Cases</div>
                 <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.testInputs}</div>
               </div>
             )}

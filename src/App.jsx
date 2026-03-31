@@ -8,6 +8,7 @@ import Standards from './components/Standards'
 import Pairing from './components/Pairing'
 import Leadership from './components/Leadership'
 import Playbook from './components/Playbook'
+import Scratchpad from './components/Scratchpad'
 
 const SECTIONS = [
   { id: 'home', label: 'Overview' },
@@ -41,6 +42,7 @@ export default function App() {
       <div className={`section active`}>
         <ActiveComponent onNavigate={setActiveSection} />
       </div>
+      <Scratchpad />
     </>
   )
 }
