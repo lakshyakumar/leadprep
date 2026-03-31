@@ -3,14 +3,16 @@ import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
   aiChallenges, zkChallenges, devopsChallenges, designChallenges,
   tsChallenges, securityChallenges, sqlChallenges, archChallenges,
-  solidityChallenges, mathChallenges, dynamicProgrammingChallenges
+  solidityChallenges, mathChallenges, dynamicProgrammingChallenges,
+  puzzleChallenges, algoChallenges
 } from '../data/data'
 
 const ALL = [
   ...jsChallenges, ...goChallenges, ...pythonChallenges, ...rustChallenges,
   ...tsChallenges, ...aiChallenges, ...zkChallenges, ...devopsChallenges,
   ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
-  ...solidityChallenges, ...mathChallenges, ...dynamicProgrammingChallenges
+  ...solidityChallenges, ...mathChallenges, ...dynamicProgrammingChallenges,
+  ...puzzleChallenges, ...algoChallenges
 ]
 
 const GROUPS = [
@@ -41,6 +43,12 @@ const GROUPS = [
       { id: 'design', label: 'System Design',  icon: '🏗️', count: designChallenges.length, data: designChallenges },
     ]
   },
+  {
+    label: 'Fundamentals', items: [
+      { id: 'algo',   label: 'Core Algorithms', icon: '📝', count: algoChallenges.length, data: algoChallenges },
+      { id: 'puzzle', label: 'Logic Puzzles',   icon: '🧩', count: puzzleChallenges.length, data: puzzleChallenges },
+    ]
+  },
 ]
 
 function ChallengeItem({ ch }) {
@@ -50,7 +58,8 @@ function ChallengeItem({ ch }) {
     JS:'badge-accent',Go:'badge-green',Python:'badge-python',Rust:'badge-rust',
     TS:'badge-ts',AI:'badge-ai',ZK:'badge-zk',DevOps:'badge-devops',
     Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
-    Solidity:'badge-solidity', 'Math/ML':'badge-math', DP: 'badge-accent'
+    Solidity:'badge-solidity', 'Math/ML':'badge-math', DP: 'badge-accent',
+    Puzzle: 'badge-medium', Algo: 'badge-ts'
   }
   return (
     <div className={`challenge-item${open?' expanded':''}`}>
