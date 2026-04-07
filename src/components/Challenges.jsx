@@ -4,7 +4,7 @@ import {
   aiChallenges, zkChallenges, devopsChallenges, designChallenges,
   tsChallenges, securityChallenges, sqlChallenges, archChallenges,
   solidityChallenges, mathChallenges, dynamicProgrammingChallenges,
-  puzzleChallenges, algoChallenges
+  puzzleChallenges, algoChallenges, mpcChallenges
 } from '../data/data'
 
 const ALL = [
@@ -12,7 +12,7 @@ const ALL = [
   ...tsChallenges, ...aiChallenges, ...zkChallenges, ...devopsChallenges,
   ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
   ...solidityChallenges, ...mathChallenges, ...dynamicProgrammingChallenges,
-  ...puzzleChallenges, ...algoChallenges
+  ...puzzleChallenges, ...algoChallenges, ...mpcChallenges
 ]
 
 const GROUPS = [
@@ -41,6 +41,7 @@ const GROUPS = [
       { id: 'ai',     label: 'AI & Prompts',   icon: '🤖', count: aiChallenges.length,    data: aiChallenges },
       { id: 'zk',     label: 'ZK Proofs',      icon: '🔐', count: zkChallenges.length,    data: zkChallenges },
       { id: 'design', label: 'System Design',  icon: '🏗️', count: designChallenges.length, data: designChallenges },
+      { id: 'mpc',    label: 'Distributed & MPC', icon: '🌐', count: mpcChallenges.length, data: mpcChallenges },
     ]
   },
   {
@@ -59,7 +60,7 @@ function ChallengeItem({ ch }) {
     TS:'badge-ts',AI:'badge-ai',ZK:'badge-zk',DevOps:'badge-devops',
     Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
     Solidity:'badge-solidity', 'Math/ML':'badge-math', DP: 'badge-accent',
-    Puzzle: 'badge-medium', Algo: 'badge-ts'
+    Puzzle: 'badge-medium', Algo: 'badge-ts', MPC: 'badge-design'
   }
   return (
     <div className={`challenge-item${open?' expanded':''}`}>
