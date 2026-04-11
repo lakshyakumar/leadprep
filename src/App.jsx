@@ -39,9 +39,9 @@ export default function App() {
   return (
     <>
       <Nav sections={SECTIONS} activeSection={activeSection} onNavigate={setActiveSection} />
-      <div className={`section active`}>
+      <main className={`section active`}>
         <ActiveComponent onNavigate={setActiveSection} />
-      </div>
+      </main>
       <Scratchpad />
     </>
   )

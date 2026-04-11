@@ -54,6 +54,24 @@ const GROUPS = [
 
 function ChallengeItem({ ch }) {
   const [open, setOpen] = useState(false)
+  const [done, setDone] = useState(() => {
+    try {
+      return localStorage.getItem(`challenge-done-${ch.id}`) === 'true'
+    } catch {
+      return false
+    }
+  })
+
+  const toggleDone = (e) => {
+    e.stopPropagation()
+    const newVal = !done
+    setDone(newVal)
+    try {
+      if (newVal) localStorage.setItem(`challenge-done-${ch.id}`, 'true')
+      else localStorage.removeItem(`challenge-done-${ch.id}`)
+    } catch (err) {}
+  }
+
   const diffClass = ch.diff === 'easy' ? 'badge-easy' : ch.diff === 'medium' ? 'badge-medium' : 'badge-hard'
   const langMap = {
     JS:'badge-accent',Go:'badge-green',Python:'badge-python',Rust:'badge-rust',
@@ -63,10 +81,34 @@ function ChallengeItem({ ch }) {
     Puzzle: 'badge-medium', Algo: 'badge-ts', MPC: 'badge-design'
   }
   return (
-    <div className={`challenge-item${open?' expanded':''}`}>
+    <div className={`challenge-item${open?' expanded':''}${done?' done':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>
       <div className="ch-row" onClick={() => setOpen(v=>!v)} style={{ cursor: 'pointer' }}>
-        <span className="ch-num">#{ch.id}</span>
-        <span className="ch-title">{ch.title}</span>
+        <div 
+          onClick={toggleDone}
+          style={{
+            marginRight: '12px',
+            width: '22px',
+            height: '22px',
+            borderRadius: '6px',
+            border: done ? '2px solid #10b981' : '2px solid rgba(255,255,255,0.2)',
+            background: done ? '#10b981' : 'rgba(0,0,0,0.2)',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            transition: 'all 0.2s',
+            flexShrink: 0
+          }}
+          title={done ? "Mark as incomplete" : "Mark as done"}
+          onMouseEnter={(e) => { if(!done) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }}
+          onMouseLeave={(e) => { if(!done) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
+        >
+          {done ? '✓' : ''}
+        </div>
+        <span className="ch-num" style={{ textDecoration: done ? 'line-through' : 'none' }}>#{ch.id}</span>
+        <span className="ch-title" style={{ textDecoration: done ? 'line-through' : 'none' }}>{ch.title}</span>
         <span className={`badge ${langMap[ch.lang]||'badge-accent'}`}>{ch.lang}</span>
         <span className={`badge ${diffClass}`}>{ch.diff}</span>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
