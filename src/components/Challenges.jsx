@@ -69,9 +69,14 @@ function ChallengeItem({ ch }) {
         <span className="ch-title">{ch.title}</span>
         <span className={`badge ${langMap[ch.lang]||'badge-accent'}`}>{ch.lang}</span>
         <span className={`badge ${diffClass}`}>{ch.diff}</span>
-        <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--text2)' }}>
-          {open ? '▲' : '▼'}
-        </span>
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text2)', fontFamily: 'monospace' }}>
+            ⏱ {ch.diff === 'easy' ? '15m' : ch.diff === 'medium' ? '30m' : '45m'}
+          </span>
+          <span style={{ fontSize: '12px', color: 'var(--text2)' }}>
+            {open ? '▲' : '▼'}
+          </span>
+        </div>
       </div>
       {open && (
         <div className="ch-detail show">
