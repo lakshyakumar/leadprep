@@ -707,3 +707,45 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; 
   opacity: 0.6;
 }
 
+/* FOOTER */
+.footer {
+  border-top: 1px solid var(--border);
+  background: rgba(10,10,15,0.95);
+  padding: 32px 24px;
+  margin-top: 60px;
+  text-align: center;
+}
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.footer-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.footer-links {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.footer-link {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-link:hover {
+  color: var(--accent);
+}
+.footer-divider {
+  color: var(--border);
+  font-size: 12px;
+}

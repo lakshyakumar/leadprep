@@ -9,6 +9,7 @@ import Pairing from './components/Pairing'
 import Leadership from './components/Leadership'
 import Playbook from './components/Playbook'
 import Scratchpad from './components/Scratchpad'
+import Footer from './components/Footer'
 
 const SECTIONS = [
   { id: 'home', label: 'Overview' },
@@ -42,6 +43,7 @@ export default function App() {
       <main className={`section active`}>
         <ActiveComponent onNavigate={setActiveSection} />
       </main>
+      <Footer />
       <Scratchpad />
     </>
   )
