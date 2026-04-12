@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="footer-content">
         <p className="footer-text">Built by Lakshya Kumar</p>
         <div className="footer-links">
-          <a href="https://www.linkedin.com/in/lakshya-kumar/" target="_blank" rel="noopener noreferrer" className="footer-link">
+          <a href="https://www.linkedin.com/in/lakshya-kumar-52735737/" target="_blank" rel="noopener noreferrer" className="footer-link">
             LinkedIn
           </a>
           <span className="footer-divider">•</span>
@@ -14,7 +14,7 @@ export default function Footer() {
             GitHub
           </a>
           <span className="footer-divider">•</span>
-          <a href="https://lakshyakumar.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+          <a href="https://lakshyakumar.github.io/lakshyakumar/" target="_blank" rel="noopener noreferrer" className="footer-link">
             Portfolio
           </a>
         </div>
