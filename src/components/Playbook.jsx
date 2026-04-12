@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { technicalChecklist, leadershipChecklist, interviewDayTimeline } from '../data/data'
 
-function ChecklistItem({ item, id }) {
-  const [checked, setChecked] = useState(false)
+function ChecklistItem({ item, id, checked, onToggle }) {
   return (
     <li>
-      <input type="checkbox" id={id} checked={checked} onChange={e => setChecked(e.target.checked)} />
+      <input 
+        type="checkbox" 
+        id={id} 
+        checked={checked} 
+        onChange={e => onToggle(id, e.target.checked)} 
+      />
       <label htmlFor={id}>{item}</label>
     </li>
   )
@@ -30,6 +34,17 @@ const icQuestions = [
 
 export default function Playbook() {
   const [tab, setTab] = useState('checklist')
+  const [checks, setChecks] = useState(() => {
+    const saved = localStorage.getItem('playbook_checks')
+    return saved ? JSON.parse(saved) : {}
+  })
+
+  const toggleCheck = (id, isChecked) => {
+    const newChecks = { ...checks, [id]: isChecked }
+    setChecks(newChecks)
+    localStorage.setItem('playbook_checks', JSON.stringify(newChecks))
+  }
+
   return (
     <div>
       <div className="section-title">Final Playbook & Interview-Day Strategy</div>
@@ -49,13 +64,19 @@ export default function Playbook() {
             <div>
               <div className="roadmap-sub-label" style={{marginBottom:8}}>Technical</div>
               <ul className="checklist">
-                {technicalChecklist.map((item, i) => <ChecklistItem key={i} item={item} id={`tech-${i}`} />)}
+                {technicalChecklist.map((item, i) => {
+                  const id = `tech-${i}`
+                  return <ChecklistItem key={id} item={item} id={id} checked={!!checks[id]} onToggle={toggleCheck} />
+                })}
               </ul>
             </div>
             <div>
               <div className="roadmap-sub-label" style={{marginBottom:8}}>Leadership & Behavioral</div>
               <ul className="checklist">
-                {leadershipChecklist.map((item, i) => <ChecklistItem key={i} item={item} id={`lead-${i}`} />)}
+                {leadershipChecklist.map((item, i) => {
+                  const id = `lead-${i}`
+                  return <ChecklistItem key={id} item={item} id={id} checked={!!checks[id]} onToggle={toggleCheck} />
+                })}
               </ul>
             </div>
           </div>

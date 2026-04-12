@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
-  aiChallenges, zkChallenges, devopsChallenges, designChallenges,
+  zkChallenges, devopsChallenges, designChallenges,
   tsChallenges, securityChallenges, sqlChallenges, archChallenges,
-  solidityChallenges, mathChallenges, dynamicProgrammingChallenges,
-  puzzleChallenges, algoChallenges, mpcChallenges
+  solidityChallenges, dynamicProgrammingChallenges,
+  puzzleChallenges, algoChallenges
 } from '../data/data'
 
 const ALL = [
   ...jsChallenges, ...goChallenges, ...pythonChallenges, ...rustChallenges,
-  ...tsChallenges, ...aiChallenges, ...zkChallenges, ...devopsChallenges,
+  ...tsChallenges, ...zkChallenges, ...devopsChallenges,
   ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
-  ...solidityChallenges, ...mathChallenges, ...dynamicProgrammingChallenges,
-  ...puzzleChallenges, ...algoChallenges, ...mpcChallenges
+  ...solidityChallenges, ...dynamicProgrammingChallenges,
+  ...puzzleChallenges, ...algoChallenges
 ]
 
 const GROUPS = [
@@ -36,12 +36,9 @@ const GROUPS = [
   },
   {
     label: 'Emerging Tech', items: [
-      { id: 'math',   label: 'Math & ML',      icon: '∑',  count: mathChallenges.length,  data: mathChallenges },
       { id: 'solidity',label: 'Solidity',      icon: '💎', count: solidityChallenges.length,  data: solidityChallenges },
-      { id: 'ai',     label: 'AI & Prompts',   icon: '🤖', count: aiChallenges.length,    data: aiChallenges },
       { id: 'zk',     label: 'ZK Proofs',      icon: '🔐', count: zkChallenges.length,    data: zkChallenges },
       { id: 'design', label: 'System Design',  icon: '🏗️', count: designChallenges.length, data: designChallenges },
-      { id: 'mpc',    label: 'Distributed & MPC', icon: '🌐', count: mpcChallenges.length, data: mpcChallenges },
     ]
   },
   {
@@ -75,10 +72,10 @@ function ChallengeItem({ ch }) {
   const diffClass = ch.diff === 'easy' ? 'badge-easy' : ch.diff === 'medium' ? 'badge-medium' : 'badge-hard'
   const langMap = {
     JS:'badge-accent',Go:'badge-green',Python:'badge-python',Rust:'badge-rust',
-    TS:'badge-ts',AI:'badge-ai',ZK:'badge-zk',DevOps:'badge-devops',
+    TS:'badge-ts',ZK:'badge-zk',DevOps:'badge-devops',
     Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
-    Solidity:'badge-solidity', 'Math/ML':'badge-math', DP: 'badge-accent',
-    Puzzle: 'badge-medium', Algo: 'badge-ts', MPC: 'badge-design'
+    Solidity:'badge-solidity', DP: 'badge-accent',
+    Puzzle: 'badge-medium', Algo: 'badge-ts'
   }
   return (
     <div className={`challenge-item${open?' expanded':''}${done?' done':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>
