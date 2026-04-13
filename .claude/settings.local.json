@@ -9,7 +9,16 @@
       "Bash(node fix_data.js)",
       "Bash(node fix_data.cjs)",
       "Bash(node add_db.cjs)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(sed -n '93,100p' \"d:\\\\code\\\\AI\\\\interview app\\\\src\\\\data\\\\data.js\")",
+      "Bash(sed -n '199,207p' \"d:\\\\code\\\\AI\\\\interview app\\\\src\\\\data\\\\data.js\")",
+      "Bash(sed -n '473,480p' \"d:\\\\code\\\\AI\\\\interview app\\\\src\\\\data\\\\data.js\")",
+      "Bash(sed -n '575,590p' \"d:\\\\code\\\\AI\\\\interview app\\\\src\\\\data\\\\data.js\")",
+      "Bash(node step1_coding_js.cjs)",
+      "Bash(node step2_go.cjs)",
+      "Bash(node step3_python_rust.cjs)",
+      "Bash(node step4_zk_react_coding.cjs)",
+      "Bash(node step5_coding.cjs)"
     ]
   }
 }

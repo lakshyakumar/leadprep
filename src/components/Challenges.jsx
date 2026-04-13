@@ -1,25 +1,34 @@
 import { useState } from 'react'
 import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
-  zkChallenges, devopsChallenges, designChallenges,
+  reactChallenges, devopsChallenges, designChallenges,
   tsChallenges, securityChallenges, sqlChallenges, archChallenges,
   solidityChallenges, dynamicProgrammingChallenges,
-  puzzleChallenges, algoChallenges, dbAdvancedChallenges
+  puzzleChallenges, algoChallenges, dbAdvancedChallenges,
+  codingChallenges
 } from '../data/data'
 
 const ALL = [
+  ...codingChallenges, ...dynamicProgrammingChallenges,
   ...jsChallenges, ...goChallenges, ...pythonChallenges, ...rustChallenges,
-  ...tsChallenges, ...zkChallenges, ...devopsChallenges,
+  ...tsChallenges, ...reactChallenges, ...devopsChallenges,
   ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
-  ...solidityChallenges, ...dynamicProgrammingChallenges,
-  ...puzzleChallenges, ...algoChallenges, ...dbAdvancedChallenges
+  ...solidityChallenges, ...puzzleChallenges, ...algoChallenges, ...dbAdvancedChallenges
 ]
 
 const GROUPS = [
   {
+    label: 'Coding', items: [
+      { id: 'coding', label: 'Coding Problems', icon: '💻', count: codingChallenges.length, data: codingChallenges },
+      { id: 'dp',     label: 'Dynamic Programming', icon: '🧠', count: dynamicProgrammingChallenges.length, data: dynamicProgrammingChallenges },
+      { id: 'algo',   label: 'Advanced Algorithms', icon: '📐', count: algoChallenges.length, data: algoChallenges },
+    ]
+  },
+  {
     label: 'Languages', items: [
       { id: 'js',     label: 'JavaScript', icon: '🟨', count: jsChallenges.length,     data: jsChallenges },
       { id: 'ts',     label: 'TypeScript', icon: '🔷', count: tsChallenges.length,     data: tsChallenges },
+      { id: 'react',  label: 'React',      icon: '⚛️', count: reactChallenges.length,  data: reactChallenges },
       { id: 'python', label: 'Python',     icon: '🐍', count: pythonChallenges.length, data: pythonChallenges },
       { id: 'go',     label: 'Golang',     icon: '🔵', count: goChallenges.length,     data: goChallenges },
       { id: 'rust',   label: 'Rust',       icon: '🦀', count: rustChallenges.length,   data: rustChallenges },
@@ -27,25 +36,18 @@ const GROUPS = [
   },
   {
     label: 'Engineering', items: [
-      { id: 'devops',    label: 'DevOps',       icon: '⚙️',  count: devopsChallenges.length,  data: devopsChallenges },
-      { id: 'security',  label: 'Security',     icon: '🔒',  count: securityChallenges.length, data: securityChallenges },
-      { id: 'sql',       label: 'SQL & DB',     icon: '🗄️', count: sqlChallenges.length,      data: sqlChallenges },
-      { id: 'dbadv',     label: 'DB Advanced',  icon: '🔬', count: dbAdvancedChallenges.length, data: dbAdvancedChallenges },
-      { id: 'arch',      label: 'Architecture', icon: '📐',  count: archChallenges.length,     data: archChallenges },
-      { id: 'dp',        label: 'Dynamic Programming', icon: '🧠', count: dynamicProgrammingChallenges.length, data: dynamicProgrammingChallenges },
+      { id: 'devops',   label: 'DevOps',      icon: '⚙️',  count: devopsChallenges.length,   data: devopsChallenges },
+      { id: 'security', label: 'Security',    icon: '🔒',  count: securityChallenges.length,  data: securityChallenges },
+      { id: 'sql',      label: 'SQL & DB',    icon: '🗄️', count: sqlChallenges.length,       data: sqlChallenges },
+      { id: 'dbadv',    label: 'DB Advanced', icon: '🔬',  count: dbAdvancedChallenges.length, data: dbAdvancedChallenges },
+      { id: 'arch',     label: 'Architecture',icon: '🏗️', count: archChallenges.length,      data: archChallenges },
+      { id: 'design',   label: 'System Design',icon: '📋', count: designChallenges.length,    data: designChallenges },
     ]
   },
   {
     label: 'Emerging Tech', items: [
-      { id: 'solidity',label: 'Solidity',      icon: '💎', count: solidityChallenges.length,  data: solidityChallenges },
-      { id: 'zk',     label: 'ZK Proofs',      icon: '🔐', count: zkChallenges.length,    data: zkChallenges },
-      { id: 'design', label: 'System Design',  icon: '🏗️', count: designChallenges.length, data: designChallenges },
-    ]
-  },
-  {
-    label: 'Fundamentals', items: [
-      { id: 'algo',   label: 'Core Algorithms', icon: '📝', count: algoChallenges.length, data: algoChallenges },
-      { id: 'puzzle', label: 'Logic Puzzles',   icon: '🧩', count: puzzleChallenges.length, data: puzzleChallenges },
+      { id: 'solidity', label: 'Solidity', icon: '💎', count: solidityChallenges.length, data: solidityChallenges },
+      { id: 'puzzle',   label: 'Logic Puzzles', icon: '🧩', count: puzzleChallenges.length, data: puzzleChallenges },
     ]
   },
 ]
@@ -77,7 +79,7 @@ function ChallengeItem({ ch }) {
     Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
     Solidity:'badge-solidity', DP: 'badge-accent',
     Puzzle: 'badge-medium', Algo: 'badge-ts',
-    MongoDB: 'badge-green'
+    MongoDB: 'badge-green', React: 'badge-accent', Code: 'badge-accent'
   }
   return (
     <div className={`challenge-item${open?' expanded':''}${done?' done':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>

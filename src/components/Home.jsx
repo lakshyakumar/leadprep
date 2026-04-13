@@ -1,15 +1,17 @@
 import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
-  tsChallenges, aiChallenges, zkChallenges, devopsChallenges,
+  tsChallenges, reactChallenges, aiChallenges, devopsChallenges,
   designChallenges, securityChallenges, sqlChallenges, archChallenges,
-  solidityChallenges, dynamicProgrammingChallenges, puzzleChallenges, algoChallenges
+  solidityChallenges, dynamicProgrammingChallenges, puzzleChallenges, algoChallenges,
+  codingChallenges, dbAdvancedChallenges
 } from '../data/data'
 
-const totalChallenges = 
+const totalChallenges =
+  codingChallenges.length + dynamicProgrammingChallenges.length +
   jsChallenges.length + goChallenges.length + pythonChallenges.length + rustChallenges.length +
-  tsChallenges.length + aiChallenges.length + zkChallenges.length + devopsChallenges.length +
+  tsChallenges.length + reactChallenges.length + aiChallenges.length + devopsChallenges.length +
   designChallenges.length + securityChallenges.length + sqlChallenges.length + archChallenges.length +
-  solidityChallenges.length + dynamicProgrammingChallenges.length + puzzleChallenges.length + algoChallenges.length
+  solidityChallenges.length + puzzleChallenges.length + algoChallenges.length + dbAdvancedChallenges.length
 
 const features = [
   { icon: '📅', title: '7-Day Calendar', body: 'Day-by-day schedule with morning, afternoon, and evening sessions. Highest-ROI topics first.', section: 'calendar' },
