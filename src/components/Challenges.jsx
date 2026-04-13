@@ -4,7 +4,7 @@ import {
   zkChallenges, devopsChallenges, designChallenges,
   tsChallenges, securityChallenges, sqlChallenges, archChallenges,
   solidityChallenges, dynamicProgrammingChallenges,
-  puzzleChallenges, algoChallenges
+  puzzleChallenges, algoChallenges, dbAdvancedChallenges
 } from '../data/data'
 
 const ALL = [
@@ -12,7 +12,7 @@ const ALL = [
   ...tsChallenges, ...zkChallenges, ...devopsChallenges,
   ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
   ...solidityChallenges, ...dynamicProgrammingChallenges,
-  ...puzzleChallenges, ...algoChallenges
+  ...puzzleChallenges, ...algoChallenges, ...dbAdvancedChallenges
 ]
 
 const GROUPS = [
@@ -30,6 +30,7 @@ const GROUPS = [
       { id: 'devops',    label: 'DevOps',       icon: '⚙️',  count: devopsChallenges.length,  data: devopsChallenges },
       { id: 'security',  label: 'Security',     icon: '🔒',  count: securityChallenges.length, data: securityChallenges },
       { id: 'sql',       label: 'SQL & DB',     icon: '🗄️', count: sqlChallenges.length,      data: sqlChallenges },
+      { id: 'dbadv',     label: 'DB Advanced',  icon: '🔬', count: dbAdvancedChallenges.length, data: dbAdvancedChallenges },
       { id: 'arch',      label: 'Architecture', icon: '📐',  count: archChallenges.length,     data: archChallenges },
       { id: 'dp',        label: 'Dynamic Programming', icon: '🧠', count: dynamicProgrammingChallenges.length, data: dynamicProgrammingChallenges },
     ]
@@ -53,7 +54,7 @@ function ChallengeItem({ ch }) {
   const [open, setOpen] = useState(false)
   const [done, setDone] = useState(() => {
     try {
-      return localStorage.getItem(`challenge-done-${ch.id}`) === 'true'
+      return localStorage.getItem(`challenge-done-${ch.lang}-${ch.id}`) === 'true'
     } catch {
       return false
     }
@@ -64,8 +65,8 @@ function ChallengeItem({ ch }) {
     const newVal = !done
     setDone(newVal)
     try {
-      if (newVal) localStorage.setItem(`challenge-done-${ch.id}`, 'true')
-      else localStorage.removeItem(`challenge-done-${ch.id}`)
+      if (newVal) localStorage.setItem(`challenge-done-${ch.lang}-${ch.id}`, 'true')
+      else localStorage.removeItem(`challenge-done-${ch.lang}-${ch.id}`)
     } catch (err) {}
   }
 
@@ -75,7 +76,8 @@ function ChallengeItem({ ch }) {
     TS:'badge-ts',ZK:'badge-zk',DevOps:'badge-devops',
     Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
     Solidity:'badge-solidity', DP: 'badge-accent',
-    Puzzle: 'badge-medium', Algo: 'badge-ts'
+    Puzzle: 'badge-medium', Algo: 'badge-ts',
+    MongoDB: 'badge-green'
   }
   return (
     <div className={`challenge-item${open?' expanded':''}${done?' done':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>
@@ -216,7 +218,7 @@ export default function Challenges() {
       </div>
 
       <div className="challenge-list">
-        {filtered.map(ch=><ChallengeItem key={ch.id} ch={ch}/>)}
+        {filtered.map(ch=><ChallengeItem key={`${ch.lang}-${ch.id}`} ch={ch}/>)}
       </div>
     </div>
   )

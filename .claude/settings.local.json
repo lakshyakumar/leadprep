@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk -F': ' '{print $2}')",
+      "Bash(awk -F',' '{print $1}')",
+      "Bash(sort -t: -k2 -n)",
+      "Bash(node -e ':*)",
+      "Bash(node -e \"console.log\\('node works'\\)\")",
+      "Bash(node fix_data.js)",
+      "Bash(node fix_data.cjs)",
+      "Bash(node add_db.cjs)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
