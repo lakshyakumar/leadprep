@@ -109,7 +109,14 @@ function ChallengeItem({ ch }) {
           {done ? '✓' : ''}
         </div>
         <span className="ch-num" style={{ textDecoration: done ? 'line-through' : 'none' }}>#{ch.id}</span>
-        <span className="ch-title" style={{ textDecoration: done ? 'line-through' : 'none' }}>{ch.title}</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flex: 1, minWidth: 0 }}>
+          <span className="ch-title" style={{ textDecoration: done ? 'line-through' : 'none' }}>{ch.title}</span>
+          {ch.lang === 'Puzzle' && !open && (
+            <span style={{ fontSize: '12px', color: 'var(--text2)', lineHeight: '1.4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {ch.problem.length > 120 ? ch.problem.slice(0, 120) + '…' : ch.problem}
+            </span>
+          )}
+        </div>
         <span className={`badge ${langMap[ch.lang]||'badge-accent'}`}>{ch.lang}</span>
         <span className={`badge ${diffClass}`}>{ch.diff}</span>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
