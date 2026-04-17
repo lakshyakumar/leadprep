@@ -52,6 +52,44 @@ const GROUPS = [
   },
 ]
 
+function looksLikeCode(text) {
+  const codePatterns = [
+    /^\s*(function|const|let|var|class|import|export|for|if|while|return|async|await)\b/m,
+    /[{};]\s*$/m,
+    /=>/,
+    /\w+\s*\(.*\)\s*[{;]/,
+    /^\s{2,}/m,
+  ]
+  return codePatterns.some(p => p.test(text))
+}
+
+function renderText(text) {
+  if (!text) return null
+  const paragraphs = text.split(/\n\n+/)
+  return paragraphs.map((para, i) => {
+    if (looksLikeCode(para)) {
+      return (
+        <pre key={i} style={{
+          background: 'rgba(0,0,0,0.35)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: '6px',
+          padding: '10px 14px',
+          fontFamily: 'monospace',
+          fontSize: '13px',
+          lineHeight: '1.6',
+          whiteSpace: 'pre-wrap',
+          overflowX: 'auto',
+          margin: '8px 0',
+          color: '#e2e8f0',
+        }}>{para}</pre>
+      )
+    }
+    return (
+      <p key={i} style={{ margin: '4px 0', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{para}</p>
+    )
+  })
+}
+
 function ChallengeItem({ ch }) {
   const [open, setOpen] = useState(false)
   const [done, setDone] = useState(() => {
@@ -133,7 +171,7 @@ function ChallengeItem({ ch }) {
           <div className="ch-detail-grid">
             <div style={{gridColumn: '1/-1', marginBottom: '8px'}}>
               <div className="ch-detail-label" style={{fontSize:'12px', color:'var(--accent)', fontWeight:'700'}}>Problem Statement</div>
-              <div className="ch-detail-val" style={{fontSize:'15px', lineHeight:'1.6', marginTop:'4px'}}>{ch.problem}</div>
+              <div className="ch-detail-val" style={{fontSize:'15px', lineHeight:'1.6', marginTop:'4px'}}>{renderText(ch.problem)}</div>
             </div>
             <div>
               <div className="ch-detail-label">Concepts</div>
@@ -155,7 +193,7 @@ function ChallengeItem({ ch }) {
             {ch.explanation && (
               <div style={{gridColumn:'1/-1', marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px'}}>
                 <div className="ch-detail-label" style={{color: '#a0aec0'}}>Key Takeaway / Explanation</div>
-                <div className="ch-detail-val" style={{color: '#e2e8f0', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.5'}}>{ch.explanation}</div>
+                <div className="ch-detail-val" style={{color: '#e2e8f0', fontSize: '14px', lineHeight: '1.5'}}>{renderText(ch.explanation)}</div>
               </div>
             )}
           </div>

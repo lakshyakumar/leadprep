@@ -14,7 +14,7 @@
   --hard: #ff6b6b;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-variant-numeric: lining-nums tabular-nums; }
 
 html {
   overflow-x: hidden;
@@ -107,19 +107,23 @@ body {
   line-height: 1.7;
 }
 .hero-stats {
-  display: flex; justify-content: center; gap: 32px;
+  display: flex; justify-content: center; gap: 48px;
   flex-wrap: wrap;
+  align-items: flex-end;
 }
-.stat { text-align: center; }
+.stat { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
 .stat-num {
   font-family: 'Syne', sans-serif;
-  font-size: 32px; font-weight: 800;
+  font-size: 52px; font-weight: 800;
   color: var(--accent);
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 .stat-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; color: var(--text2);
+  font-size: 13px; color: var(--text2);
   text-transform: uppercase; letter-spacing: 0.1em;
+  margin-top: 4px;
 }
 
 /* SECTION TITLE */

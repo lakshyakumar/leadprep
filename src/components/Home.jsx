@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
   tsChallenges, reactChallenges, aiChallenges, devopsChallenges,
@@ -5,6 +6,38 @@ import {
   solidityChallenges, dynamicProgrammingChallenges, puzzleChallenges, algoChallenges,
   codingChallenges, dbAdvancedChallenges
 } from '../data/data'
+
+function CountUp({ target, suffix = '', duration = 1800 }) {
+  const [display, setDisplay] = useState(0)
+  const ref = useRef(null)
+  const started = useRef(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true
+          const isNumeric = typeof target === 'number'
+          if (!isNumeric) { setDisplay(target); return }
+          const start = performance.now()
+          const tick = (now) => {
+            const elapsed = now - start
+            const progress = Math.min(elapsed / duration, 1)
+            const ease = 1 - Math.pow(1 - progress, 3)
+            setDisplay(Math.round(ease * target))
+            if (progress < 1) requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        }
+      },
+      { threshold: 0.3 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [target, duration])
+
+  return <span ref={ref}>{display}{suffix}</span>
+}
 
 const totalChallenges =
   codingChallenges.length + dynamicProgrammingChallenges.length +
@@ -32,10 +65,10 @@ export default function Home({ onNavigate }) {
         <h1>7-Day Mastery Plan</h1>
         <p>A complete, execution-focused preparation system for Engineering Leadership interviews. Covering technical depth, architecture breadth, and leadership maturity.</p>
         <div className="hero-stats">
-          <div className="stat"><div className="stat-num">7</div><div className="stat-label">Days</div></div>
-          <div className="stat"><div className="stat-num">{totalChallenges}</div><div className="stat-label">Challenges</div></div>
-          <div className="stat"><div className="stat-num">8</div><div className="stat-label">Interview Types</div></div>
-          <div className="stat"><div className="stat-num">50+</div><div className="stat-label">STAR Stories</div></div>
+          <div className="stat"><div className="stat-num"><CountUp target={7} /></div><div className="stat-label">Days</div></div>
+          <div className="stat"><div className="stat-num"><CountUp target={totalChallenges} /></div><div className="stat-label">Challenges</div></div>
+          <div className="stat"><div className="stat-num"><CountUp target={8} /></div><div className="stat-label">Interview Types</div></div>
+          <div className="stat"><div className="stat-num"><CountUp target={50} suffix="+" /></div><div className="stat-label">STAR Stories</div></div>
         </div>
       </div>
 

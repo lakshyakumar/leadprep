@@ -18,7 +18,12 @@
       "Bash(node step2_go.cjs)",
       "Bash(node step3_python_rust.cjs)",
       "Bash(node step4_zk_react_coding.cjs)",
-      "Bash(node step5_coding.cjs)"
+      "Bash(node step5_coding.cjs)",
+      "Bash(grep -n \"^\\\\`\\\\`\\\\`\\\\|\\\\\\\\\\\\\\\\n\\\\`\\\\`\\\\`\" \"d:/code/AI/interview app/src/data/data.js\")",
+      "Bash(grep -o \".\\\\{0,5\\\\}\\\\`\\\\`\\\\`.\\\\{0,20\\\\}\" \"d:/code/AI/interview app/src/data/data.js\")",
+      "Bash(grep -o \"\\\\\\\\\\\\\\\\n[a-z]*\\\\\\\\\\\\\\\\n\" \"d:/code/AI/interview app/src/data/data.js\")",
+      "Bash(\" | head -10)",
+      "Bash(grep -i \"```\" | head -10)"
     ]
   }
 }
