@@ -63,6 +63,32 @@ function looksLikeCode(text) {
   return codePatterns.some(p => p.test(text))
 }
 
+// Render inline code: backtick spans, .method(), Type(), and common code tokens
+function renderInline(text) {
+  const parts = []
+  // Match: `backtick content`, .method(), standalone() calls, PascalCase types, snake_case
+  const re = /`([^`]+)`|(\.[a-zA-Z_]\w*\(\w*\))|([A-Za-z_]\w*\(\))|(\b(?:async|await|null|undefined|true|false|this|new|typeof|instanceof|void|delete|in|of|const|let|var|function|class|return|throw|try|catch|finally|import|export|default|extends|implements|interface|type|enum|public|private|protected|static|readonly|override|abstract|super)\b)/g
+  let last = 0, m
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index))
+    const matched = m[1] ?? m[2] ?? m[3] ?? m[4]
+    parts.push(
+      <code key={m.index} style={{
+        fontFamily: 'monospace',
+        fontSize: '0.88em',
+        background: 'rgba(124,106,255,0.15)',
+        color: '#a78bfa',
+        borderRadius: '3px',
+        padding: '1px 5px',
+        border: '1px solid rgba(124,106,255,0.2)',
+      }}>{matched}</code>
+    )
+    last = re.lastIndex
+  }
+  if (last < text.length) parts.push(text.slice(last))
+  return parts
+}
+
 function renderText(text) {
   if (!text) return null
   const paragraphs = text.split(/\n\n+/)
@@ -85,7 +111,7 @@ function renderText(text) {
       )
     }
     return (
-      <p key={i} style={{ margin: '4px 0', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{para}</p>
+      <p key={i} style={{ margin: '4px 0', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{renderInline(para)}</p>
     )
   })
 }
