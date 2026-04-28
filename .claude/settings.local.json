@@ -23,7 +23,31 @@
       "Bash(grep -o \".\\\\{0,5\\\\}\\\\`\\\\`\\\\`.\\\\{0,20\\\\}\" \"d:/code/AI/interview app/src/data/data.js\")",
       "Bash(grep -o \"\\\\\\\\\\\\\\\\n[a-z]*\\\\\\\\\\\\\\\\n\" \"d:/code/AI/interview app/src/data/data.js\")",
       "Bash(\" | head -10)",
-      "Bash(grep -i \"```\" | head -10)"
+      "Bash(grep -i \"```\" | head -10)",
+      "Bash(grep -E \"\\\\.\\(jsx|tsx\\)$\")",
+      "Bash(whois scrim.dev)",
+      "Bash(whois -h whois.nic.google scrim.dev)",
+      "Bash(whois -h whois.nic.google made-up-name-xyz123.dev)",
+      "Bash(npm install *)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s http://localhost:5173/src/main.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Home.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Nav.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Companies.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Challenges.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Leadership.jsx)",
+      "Bash(grep -nE \"^  \\\\{ id: [0-9]+, lang: \\\\\"Design\\\\\"\" /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(grep -nE \"^  \\\\{ id: [0-9]+, lang: \\\\\"Arch\\\\\"\" /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(grep -nE \"^  \\\\{ id: [0-9]+, lang: \\\\\"DP\\\\\"\" /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(grep -nE \"^  \\\\{ id: [0-9]+, lang: \\\\\"Algo\\\\\"\" /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(grep -nE \"^  \\\\{ id: [0-9]+, lang: \\\\\"SQL\\\\\"|^  \\\\{ id: [0-9]+, lang: \\\\\"MongoDB\\\\\"\" /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(grep -nE \"^  \\\\{ id: [0-9]+, lang: \\\\\"Solidity\\\\\"\" /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(curl -s http://localhost:5173/src/App.jsx)",
+      "Bash(curl -s http://localhost:5173/src/utils/search.js)",
+      "Bash(curl -s http://localhost:5173/src/components/SearchModal.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Progress.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Mock.jsx)",
+      "Bash(curl -s http://localhost:5173/src/data/categories.js)"
     ]
   }
 }

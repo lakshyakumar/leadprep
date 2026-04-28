@@ -1,25 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   jsChallenges, goChallenges, pythonChallenges, rustChallenges,
   reactChallenges, devopsChallenges, designChallenges,
   tsChallenges, securityChallenges, sqlChallenges, archChallenges,
   solidityChallenges, dynamicProgrammingChallenges,
   puzzleChallenges, algoChallenges, dbAdvancedChallenges,
-  codingChallenges
+  codingChallenges, codingQuestions, debuggingChallenges,
+  bashChallenges, mathChallenges, aiChallenges, mpcChallenges,
+  apiDesignChallenges, incidentChallenges, patternsChallenges,
 } from '../data/data'
+import { COMPANIES, COMPANY_LABELS } from '../data/companies'
 
 const ALL = [
-  ...codingChallenges, ...dynamicProgrammingChallenges,
+  ...codingChallenges, ...codingQuestions, ...dynamicProgrammingChallenges,
   ...jsChallenges, ...goChallenges, ...pythonChallenges, ...rustChallenges,
   ...tsChallenges, ...reactChallenges, ...devopsChallenges,
   ...designChallenges, ...securityChallenges, ...sqlChallenges, ...archChallenges,
-  ...solidityChallenges, ...puzzleChallenges, ...algoChallenges, ...dbAdvancedChallenges
+  ...solidityChallenges, ...puzzleChallenges, ...algoChallenges, ...dbAdvancedChallenges,
+  ...debuggingChallenges, ...bashChallenges, ...mathChallenges,
+  ...aiChallenges, ...mpcChallenges,
+  ...apiDesignChallenges, ...incidentChallenges, ...patternsChallenges,
 ]
 
 const GROUPS = [
   {
     label: 'Coding', items: [
       { id: 'coding', label: 'Coding Problems', icon: '💻', count: codingChallenges.length, data: codingChallenges },
+      { id: 'dsa',    label: 'DSA Patterns', icon: '🧩', count: codingQuestions.length, data: codingQuestions },
       { id: 'dp',     label: 'Dynamic Programming', icon: '🧠', count: dynamicProgrammingChallenges.length, data: dynamicProgrammingChallenges },
       { id: 'algo',   label: 'Advanced Algorithms', icon: '📐', count: algoChallenges.length, data: algoChallenges },
     ]
@@ -36,17 +43,25 @@ const GROUPS = [
   },
   {
     label: 'Engineering', items: [
-      { id: 'devops',   label: 'DevOps',      icon: '⚙️',  count: devopsChallenges.length,   data: devopsChallenges },
-      { id: 'security', label: 'Security',    icon: '🔒',  count: securityChallenges.length,  data: securityChallenges },
-      { id: 'sql',      label: 'SQL & DB',    icon: '🗄️', count: sqlChallenges.length,       data: sqlChallenges },
-      { id: 'dbadv',    label: 'DB Advanced', icon: '🔬',  count: dbAdvancedChallenges.length, data: dbAdvancedChallenges },
-      { id: 'arch',     label: 'Architecture',icon: '🏗️', count: archChallenges.length,      data: archChallenges },
-      { id: 'design',   label: 'System Design',icon: '📋', count: designChallenges.length,    data: designChallenges },
+      { id: 'devops',    label: 'DevOps',       icon: '⚙️',  count: devopsChallenges.length,   data: devopsChallenges },
+      { id: 'bash',      label: 'Bash & Shell', icon: '🐚',  count: bashChallenges.length,      data: bashChallenges },
+      { id: 'security',  label: 'Security',     icon: '🔒',  count: securityChallenges.length,  data: securityChallenges },
+      { id: 'sql',       label: 'SQL & DB',     icon: '🗄️', count: sqlChallenges.length,        data: sqlChallenges },
+      { id: 'dbadv',     label: 'DB Advanced',  icon: '🔬',  count: dbAdvancedChallenges.length, data: dbAdvancedChallenges },
+      { id: 'arch',      label: 'Architecture', icon: '🏗️', count: archChallenges.length,      data: archChallenges },
+      { id: 'design',    label: 'System Design',icon: '📋',  count: designChallenges.length,    data: designChallenges },
+      { id: 'apidesign', label: 'API Design',   icon: '🌐',  count: apiDesignChallenges.length, data: apiDesignChallenges },
+      { id: 'patterns',  label: 'Design Patterns', icon: '🎨', count: patternsChallenges.length, data: patternsChallenges },
+      { id: 'oncall',    label: 'On-Call / Incidents', icon: '🚨', count: incidentChallenges.length, data: incidentChallenges },
+      { id: 'debugging', label: 'Debugging',    icon: '🐛',  count: debuggingChallenges.length, data: debuggingChallenges },
+      { id: 'math',      label: 'Math & ML',    icon: '🔢',  count: mathChallenges.length,      data: mathChallenges },
     ]
   },
   {
     label: 'Emerging Tech', items: [
       { id: 'solidity', label: 'Solidity', icon: '💎', count: solidityChallenges.length, data: solidityChallenges },
+      { id: 'ai',       label: 'AI / Prompting', icon: '🤖', count: aiChallenges.length, data: aiChallenges },
+      { id: 'mpc',      label: 'MPC & Distributed', icon: '🔗', count: mpcChallenges.length, data: mpcChallenges },
       { id: 'puzzle',   label: 'Logic Puzzles', icon: '🧩', count: puzzleChallenges.length, data: puzzleChallenges },
     ]
   },
@@ -116,8 +131,17 @@ function renderText(text) {
   })
 }
 
-function ChallengeItem({ ch }) {
+function ChallengeItem({ ch, forceOpen, onOpened }) {
   const [open, setOpen] = useState(false)
+  const rowRef = useRef(null)
+  useEffect(() => {
+    if (forceOpen) {
+      setOpen(true)
+      rowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      onOpened?.()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forceOpen])
   const [done, setDone] = useState(() => {
     try {
       return localStorage.getItem(`challenge-done-${ch.lang}-${ch.id}`) === 'true'
@@ -143,10 +167,13 @@ function ChallengeItem({ ch }) {
     Design:'badge-design',Security:'badge-security',SQL:'badge-sql',Arch:'badge-arch',
     Solidity:'badge-solidity', DP: 'badge-accent',
     Puzzle: 'badge-medium', Algo: 'badge-ts',
-    MongoDB: 'badge-green', React: 'badge-accent', Code: 'badge-accent'
+    MongoDB: 'badge-green', React: 'badge-accent', Code: 'badge-accent',
+    AI: 'badge-ai', 'Math/ML': 'badge-math', MPC: 'badge-zk',
+    DSA: 'badge-accent', Debugging: 'badge-security', Bash: 'badge-devops',
+    API: 'badge-design', OnCall: 'badge-security', Pattern: 'badge-arch',
   }
   return (
-    <div className={`challenge-item${open?' expanded':''}${done?' done':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>
+    <div ref={rowRef} className={`challenge-item${open?' expanded':''}${done?' done':''}${forceOpen?' highlighted':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>
       <div className="ch-row" onClick={() => setOpen(v=>!v)} style={{ cursor: 'pointer' }}>
         <div 
           onClick={toggleDone}
@@ -183,6 +210,13 @@ function ChallengeItem({ ch }) {
         </div>
         <span className={`badge ${langMap[ch.lang]||'badge-accent'}`}>{ch.lang}</span>
         <span className={`badge ${diffClass}`}>{ch.diff}</span>
+        {ch.companies?.length > 0 && (
+          <span style={{display:'flex', gap:'4px', flexWrap:'wrap'}}>
+            {ch.companies.map(co => (
+              <span key={co} className={`badge company-${co}`} title={COMPANY_LABELS[co] ?? co}>{COMPANY_LABELS[co] ?? co}</span>
+            ))}
+          </span>
+        )}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontSize: '11px', color: 'var(--text2)', fontFamily: 'monospace' }}>
             ⏱ {ch.diff === 'easy' ? '15m' : ch.diff === 'medium' ? '30m' : '45m'}
@@ -229,17 +263,40 @@ function ChallengeItem({ ch }) {
   )
 }
 
-export default function Challenges() {
+export default function Challenges({ navIntent, clearNavIntent }) {
   const [active, setActive] = useState('all')
   const [diff, setDiff] = useState('all')
+  const [company, setCompany] = useState('all')
+  const [targetChallenge, setTargetChallenge] = useState(null)
+
+  useEffect(() => {
+    if (!navIntent) return
+    if (navIntent.category) setActive(navIntent.category)
+    if (navIntent.diff) setDiff(navIntent.diff)
+    if (navIntent.challengeId) setTargetChallenge({ id: navIntent.challengeId, lang: navIntent.lang })
+    // clear any limiting filters that would hide the target
+    if (navIntent.challengeId) {
+      setDiff('all')
+      setCompany('all')
+    }
+    clearNavIntent?.()
+  }, [navIntent, clearNavIntent])
 
   const dataset = active === 'all' ? ALL : GROUPS.flatMap(g=>g.items).find(i=>i.id===active)?.data || []
-  const filtered = diff === 'all' ? dataset : dataset.filter(c=>c.diff===diff)
+  const filtered = dataset
+    .filter(c => diff === 'all' || c.diff === diff)
+    .filter(c => {
+      if (company === 'all') return true
+      if (company === 'untagged') return !c.companies?.length
+      return c.companies?.includes(company)
+    })
+
+  const taggedTotal = ALL.reduce((n,c) => n + (c.companies?.length ? 1 : 0), 0)
 
   return (
     <div>
       <div className="section-title">Engineering Challenges</div>
-      <div className="section-subtitle">{ALL.length} challenges across 12 topics · Click a category to filter</div>
+      <div className="section-subtitle">{ALL.length} challenges across {GROUPS.reduce((n,g)=>n+g.items.length,0)} topics · Click a category to filter</div>
 
       {/* ALL button */}
       <div style={{marginBottom:'8px'}}>
@@ -274,8 +331,29 @@ export default function Challenges() {
         ))}
       </div>
 
-      {/* Difficulty filter */}
+      {/* Company filter */}
       <div className="filter-bar" style={{marginTop:'16px'}}>
+        <span style={{fontSize:'10px', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--text-muted)', alignSelf:'center', marginRight:6}}>Company</span>
+        <button className={`filter-btn${company==='all'?' active':''}`} onClick={()=>setCompany('all')}>All</button>
+        {COMPANIES.map(co => (
+          <button key={co} className={`filter-btn${company===co?' active':''}`} onClick={()=>setCompany(co)}>
+            {COMPANY_LABELS[co]}
+            <span style={{marginLeft:'4px',opacity:.6,fontSize:'11px'}}>
+              ({dataset.filter(c => c.companies?.includes(co)).length})
+            </span>
+          </button>
+        ))}
+        <button className={`filter-btn${company==='untagged'?' active':''}`} onClick={()=>setCompany('untagged')}>
+          Untagged
+          <span style={{marginLeft:'4px',opacity:.6,fontSize:'11px'}}>
+            ({dataset.filter(c => !c.companies?.length).length})
+          </span>
+        </button>
+      </div>
+
+      {/* Difficulty filter */}
+      <div className="filter-bar" style={{marginTop:'8px'}}>
+        <span style={{fontSize:'10px', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--text-muted)', alignSelf:'center', marginRight:6}}>Difficulty</span>
         {['all','easy','medium','hard'].map(f=>(
           <button key={f} className={`filter-btn${diff===f?' active':''}`} onClick={()=>setDiff(f)}>
             {f.charAt(0).toUpperCase()+f.slice(1)}
@@ -286,12 +364,22 @@ export default function Challenges() {
         ))}
       </div>
 
-      <div style={{color:'var(--text-muted)',fontSize:'13px',marginBottom:'12px'}}>
-        Showing {filtered.length} challenge{filtered.length!==1?'s':''}
+      <div style={{color:'var(--text-muted)',fontSize:'13px',marginBottom:'12px',marginTop:'12px'}}>
+        Showing {filtered.length} challenge{filtered.length!==1?'s':''} · {taggedTotal} of {ALL.length} questions tagged with FAANG sources
       </div>
 
       <div className="challenge-list">
-        {filtered.map(ch=><ChallengeItem key={`${ch.lang}-${ch.id}`} ch={ch}/>)}
+        {filtered.map(ch => {
+          const matched = targetChallenge && targetChallenge.id === ch.id && targetChallenge.lang === ch.lang
+          return (
+            <ChallengeItem
+              key={`${ch.lang}-${ch.id}`}
+              ch={ch}
+              forceOpen={matched}
+              onOpened={matched ? () => setTargetChallenge(null) : undefined}
+            />
+          )
+        })}
       </div>
     </div>
   )

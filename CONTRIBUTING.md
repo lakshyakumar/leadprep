@@ -1,15 +1,67 @@
-# Contributing to LEADPREP
+# Contributing to CRACKED
 
-Thanks for wanting to improve this project! Contributions of all kinds are welcome — new challenges, fixes, UI improvements, or new topic areas.
+Thanks for wanting to improve this project! Contributions of all kinds are welcome — new challenges, fixes, UI improvements, new topic areas, and **FAANG company tags on existing questions**.
 
 ## What You Can Contribute
 
 | Type | Examples |
 |---|---|
 | **New challenges** | Add questions to existing categories or propose a new category |
+| **FAANG tags** | Tag an existing question with the company that asks it (with a citation) |
 | **Content fixes** | Typos, outdated info, broken links in Standards |
 | **UI improvements** | Better mobile layout, accessibility, new components |
 | **New categories** | A whole new challenge topic (e.g. GraphQL, Mobile, ML Ops) |
+
+---
+
+## 🏷️ Tagging Questions with FAANG Companies
+
+Every challenge or question can be tagged with the company that asks it. Tags surface as filter buttons and small badges in the UI, so users can prep for a specific target company.
+
+**Canonical taxonomy** lives in [src/data/companies.js](src/data/companies.js): `meta`, `google`, `amazon`, `apple`, `netflix`, `microsoft`, `other`.
+
+**Schema** — add `companies`, `source`, and optionally `frequency` / `lastSeen` fields to any challenge or question object:
+
+```js
+{
+  id: 21, lang: "Code", diff: "medium", title: "LRU Cache",
+  // existing fields...
+  companies: ["meta", "google", "amazon", "microsoft"],
+  source: "https://leetcode.com/company/facebook/",   // or "community" for aggregated public reports
+  frequency: "high",     // optional: high | medium | low
+  lastSeen: "2024-Q3",   // optional, freshness signal
+}
+```
+
+For bare-string question arrays (e.g. `roadmapData[i].questions`), upgrade the entry to an object:
+
+```js
+// before
+"How do you handle an underperformer?"
+
+// after
+{ q: "How do you handle an underperformer?", companies: ["google","meta"], source: "community" }
+```
+
+The `renderQ` helper handles both shapes, so untagged entries can stay as strings.
+
+### The hard rule
+
+**A `companies` tag without a citable `source` will not be merged.**
+
+Empty array (`companies: []`, or no `companies` field at all) is honest — it means we have no public source yet. Speculative tags poison user trust and we'd rather have 100 well-sourced tags than 600 guesses.
+
+Acceptable `source` values:
+- A specific URL — LeetCode company tag page, Glassdoor interview report, levels.fyi thread, Blind post, official job board screen recording.
+- `"community"` — for tags supported by multiple corroborating public reports across LeetCode + Glassdoor + Blind. Use sparingly; prefer a specific URL.
+- `"manual"` — for questions you personally have seen asked, with at least the year and round type ("Meta Staff E5 onsite, Q4 2024").
+
+### How to add tags via PR
+
+1. Open `src/data/data.js`, find the question/challenge by `title` and `id`.
+2. Add the `companies`, `source` fields per the schema above.
+3. In the PR description, summarize: "tagging N questions with K sources" and link the sources.
+4. If a question is asked by 4+ companies, consider whether it's actually company-agnostic — tag it sparingly.
 
 ---
 

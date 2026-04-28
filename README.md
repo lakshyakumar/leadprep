@@ -1,6 +1,8 @@
-# LEADPREP — Engineering Leadership Interview Prep
+# CRACKED — Engineer Interview Prep
 
-A complete, execution-focused preparation system for Engineering Leadership interviews, built as a **React + Vite** single-page application.
+A 7-day, execution-focused interview prep system for **every engineer** — from IC to Staff to Lead. Coding, system design, behavioral, and leadership prep, filterable by role and by target FAANG company. Built as a **React + Vite** single-page app.
+
+(formerly LEADPREP)
 
 ## 🚀 Getting Started
 
@@ -13,6 +15,17 @@ npm run dev
 # → http://localhost:5173/
 ```
 
+## 🎯 Who it's for
+
+| Role | What you get |
+|---|---|
+| **IC / new grad** | Coding challenges, language deep-dives, IC behavioral prep, debugging & on-call scenarios |
+| **Senior** | Everything above + system design, API design, code-review/standards, communication |
+| **Staff** | Architecture, technical strategy, cross-functional influence, technical vision |
+| **Lead / EM** | All of the above + people management, hiring, delegation, performance, advanced leadership |
+
+A role pill in the nav (`All / IC / Senior / Staff / Lead / EM`) filters role-specific tracks. Default is `All` — toggle to focus.
+
 ## 📚 What's Inside
 
 | Section | Description |
@@ -20,21 +33,47 @@ npm run dev
 | **Overview** | Hero stats + clickable feature tiles |
 | **7-Day Plan** | Full plan · 2hr/day compressed · Emergency top-20 |
 | **Roadmap** | 8 interview categories — what's evaluated, how to prepare, common mistakes |
-| **100 Challenges** | 50 JS + 50 Go problems, filterable by difficulty, expandable details |
-| **Standards** | Clean Code, SOLID, DRY/KISS/YAGNI, JS, Go, Ops & DORA |
+| **Challenges** | 600+ coding/design/debugging problems, filterable by category, difficulty, and FAANG company |
+| **Standards** | Clean Code, SOLID, DRY/KISS/YAGNI, language guides |
 | **Pair Programming** | Communication templates, narration tips, recovery protocol |
-| **Leadership** | STAR framework, 150 behavioral questions, advanced leadership areas |
+| **Behavioral & Leadership** | STAR framework, behavioral question banks for ICs and managers, advanced leadership areas |
 | **Playbook** | Interactive checklists, hour-by-hour interview-day guide, questions to ask |
+
+## 🏷️ Company tagging
+
+Every question can be tagged with the FAANG company where it was originally asked: Meta, Google, Amazon, Apple, Netflix, Microsoft, plus "Other". Filter the Challenges page by company to focus your prep.
+
+**Contributing tags**: a `companies` tag must include a `source` field citing the public reference (LeetCode company tag page, Glassdoor interview report, Blind post, Levels.fyi thread, etc.). Tags without a citation will not be merged. An empty array is honest; speculative tags poison user trust.
+
+Schema:
+
+```js
+{
+  id, lang, diff, title, concepts, problem, why, examples, testInputs, explanation,
+  // optional:
+  companies: ['meta', 'google'],
+  frequency: 'high' | 'medium' | 'low',
+  source: 'leetcode' | 'glassdoor' | 'blind' | 'manual' | 'community',
+  lastSeen: '2024-Q3',
+}
+```
+
+Canonical taxonomy lives in [src/data/companies.js](src/data/companies.js).
 
 ## 🏗️ Project Structure
 
 ```
 src/
-├── main.jsx
-├── App.jsx                 # Section routing via useState
-├── index.css               # Global design system (dark theme, CSS vars)
+├── main.jsx                     # Wraps App in RoleProvider
+├── App.jsx                      # Section routing via useState
+├── index.css                    # Global design system (dark theme, CSS vars)
 ├── data/
-│   └── data.js             # All content data (100 challenges, roadmap, checklists…)
+│   ├── data.js                  # All content (challenges, roadmap, checklists)
+│   └── companies.js             # FAANG taxonomy
+├── context/
+│   └── RoleContext.jsx          # Role pill state, persisted to localStorage
+├── utils/
+│   └── renderQ.js               # Tolerates both string and {q, companies} questions
 └── components/
     ├── Nav.jsx
     ├── Home.jsx

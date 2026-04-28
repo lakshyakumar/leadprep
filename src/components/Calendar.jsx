@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRole } from '../context/RoleContext'
 
 const days = [
   {
@@ -81,10 +82,20 @@ function Tabs({ tabs, active, onSelect }) {
 
 export default function Calendar() {
   const [tab, setTab] = useState('full')
+  const { role } = useRole()
+  const isIC = role === 'ic' || role === 'senior'
   return (
     <div>
       <div className="section-title">7-Day Preparation Calendar</div>
       <div className="section-subtitle">Each day is themed. Sessions are 90–120 min each.</div>
+      {isIC && (
+        <div className="card" style={{marginBottom:16, background:'rgba(124,106,255,0.06)', borderColor:'rgba(124,106,255,0.25)'}}>
+          <div className="card-title" style={{color:'var(--accent)', fontSize:13}}>👋 For IC / Senior engineers</div>
+          <div className="card-body" style={{fontSize:13}}>
+            Leadership-themed sessions still apply — frame stories as IC wins (a bug you owned end-to-end, a code review you pushed back on, mentoring a junior, an architectural disagreement you resolved) instead of org-level decisions. The frameworks (STAR, SBI feedback, BLUF) work at every level.
+          </div>
+        </div>
+      )}
       <Tabs tabs={[{id:'full',label:'Full Plan'},{id:'compressed',label:'2hr/Day Version'},{id:'emergency',label:'Emergency (Top 20)'}]} active={tab} onSelect={setTab} />
 
       {tab === 'full' && (
@@ -131,7 +142,7 @@ export default function Calendar() {
       {tab === 'emergency' && (
         <div className="emergency-box">
           <div className="emergency-title">🚨 Emergency Mode: Top 20 Coding Challenges Only</div>
-          <div className="card-body" style={{marginBottom:14}}>If you have minimal time, solve these 20 challenges — they cover the highest-frequency patterns seen in engineering leadership interviews.</div>
+          <div className="card-body" style={{marginBottom:14}}>If you have minimal time, solve these 20 challenges — they cover the highest-frequency patterns seen in engineering interviews.</div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
             <div>
               <div className="roadmap-sub-label">Core Concepts (10)</div>

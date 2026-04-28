@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { technicalChecklist, leadershipChecklist, interviewDayTimeline } from '../data/data'
+import { useRole } from '../context/RoleContext'
 
 function ChecklistItem({ item, id, checked, onToggle }) {
   return (
@@ -15,7 +16,7 @@ function ChecklistItem({ item, id, checked, onToggle }) {
   )
 }
 
-const engLeaderQuestions = [
+const managerQuestions = [
   "What does engineering excellence look like on this team today vs where you want it to be?",
   "How does the team balance delivery speed with technical quality?",
   "What's the biggest technical challenge the team is facing in the next 6 months?",
@@ -23,8 +24,16 @@ const engLeaderQuestions = [
   "What does a successful first 90 days look like in this role?",
   "How does engineering work with product on roadmap prioritization?",
 ]
-const icQuestions = [
-  "What's something you wish leadership understood better about the team's day-to-day challenges?",
+const peerEngineerQuestions = [
+  "What's the most challenging thing you've worked on here in the last 6 months?",
+  "How does code review work day-to-day? Average turnaround time?",
+  "What's the on-call rotation like? Toil level?",
+  "How do you make space for refactoring or paying down tech debt?",
+  "What does growing from senior to staff look like on this team?",
+  "What's something you wish you knew before joining?",
+]
+const reportQuestions = [
+  "What's something you wish leadership understood better about the team's day-to-day?",
   "How do decisions get made between engineering and product?",
   "What does career growth look like for engineers here?",
   "What are you most proud of that this team has shipped?",
@@ -34,6 +43,8 @@ const icQuestions = [
 
 export default function Playbook() {
   const [tab, setTab] = useState('checklist')
+  const { role } = useRole()
+  const showReportQuestions = role === 'all' || role === 'lead' || role === 'em'
   const [checks, setChecks] = useState(() => {
     const saved = localStorage.getItem('playbook_checks')
     return saved ? JSON.parse(saved) : {}
@@ -105,18 +116,24 @@ export default function Playbook() {
         <div>
           <div className="card" style={{marginBottom:16}}>
             <div className="card-title">❓ Questions to Ask Your Interviewers</div>
-            <div className="card-body">Asking smart questions signals leadership maturity. Prepare 2–3 per interviewer type.</div>
+            <div className="card-body">Asking smart questions signals seniority and engagement. Prepare 2–3 per interviewer type.</div>
           </div>
           <div className="two-col">
             <div>
-              <div className="roadmap-sub-label" style={{marginBottom:8}}>For Engineering Leaders</div>
-              <ul className="qs-list">{engLeaderQuestions.map(q => <li key={q}>{q}</li>)}</ul>
+              <div className="roadmap-sub-label" style={{marginBottom:8}}>For Engineering Leaders / Hiring Managers</div>
+              <ul className="qs-list">{managerQuestions.map(q => <li key={q}>{q}</li>)}</ul>
             </div>
             <div>
-              <div className="roadmap-sub-label" style={{marginBottom:8}}>For ICs / Future Reports</div>
-              <ul className="qs-list">{icQuestions.map(q => <li key={q}>{q}</li>)}</ul>
+              <div className="roadmap-sub-label" style={{marginBottom:8}}>For Peer Engineers / Future Teammates</div>
+              <ul className="qs-list">{peerEngineerQuestions.map(q => <li key={q}>{q}</li>)}</ul>
             </div>
           </div>
+          {showReportQuestions && (
+            <div style={{marginTop:16}}>
+              <div className="roadmap-sub-label" style={{marginBottom:8}}>For ICs / Future Reports (if hiring as Lead/EM)</div>
+              <ul className="qs-list">{reportQuestions.map(q => <li key={q}>{q}</li>)}</ul>
+            </div>
+          )}
         </div>
       )}
     </div>

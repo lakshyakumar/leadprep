@@ -4,7 +4,9 @@ import {
   tsChallenges, reactChallenges, aiChallenges, devopsChallenges,
   designChallenges, securityChallenges, sqlChallenges, archChallenges,
   solidityChallenges, dynamicProgrammingChallenges, puzzleChallenges, algoChallenges,
-  codingChallenges, dbAdvancedChallenges
+  codingChallenges, dbAdvancedChallenges, codingQuestions, debuggingChallenges,
+  bashChallenges, mathChallenges, mpcChallenges, apiDesignChallenges,
+  incidentChallenges, patternsChallenges
 } from '../data/data'
 
 function CountUp({ target, suffix = '', duration = 1800 }) {
@@ -40,11 +42,13 @@ function CountUp({ target, suffix = '', duration = 1800 }) {
 }
 
 const totalChallenges =
-  codingChallenges.length + dynamicProgrammingChallenges.length +
+  codingChallenges.length + codingQuestions.length + dynamicProgrammingChallenges.length +
   jsChallenges.length + goChallenges.length + pythonChallenges.length + rustChallenges.length +
   tsChallenges.length + reactChallenges.length + aiChallenges.length + devopsChallenges.length +
   designChallenges.length + securityChallenges.length + sqlChallenges.length + archChallenges.length +
-  solidityChallenges.length + puzzleChallenges.length + algoChallenges.length + dbAdvancedChallenges.length
+  solidityChallenges.length + puzzleChallenges.length + algoChallenges.length + dbAdvancedChallenges.length +
+  debuggingChallenges.length + bashChallenges.length + mathChallenges.length + mpcChallenges.length +
+  apiDesignChallenges.length + incidentChallenges.length + patternsChallenges.length
 
 const features = [
   { icon: '📅', title: '7-Day Calendar', body: 'Day-by-day schedule with morning, afternoon, and evening sessions. Highest-ROI topics first.', section: 'calendar' },
@@ -52,7 +56,10 @@ const features = [
   { icon: '⚡', title: `${totalChallenges} Coding Challenges`, body: 'JavaScript, Golang, Python, Rust, TS, Solidity, Security, DevOps, Architecture, and more. Organized by difficulty.', section: 'challenges' },
   { icon: '📐', title: 'Coding Standards', body: 'Clean Code, SOLID, DRY/KISS/YAGNI, JS best practices, idiomatic Go, API design.', section: 'standards' },
   { icon: '🤝', title: 'Pair Programming', body: 'How to communicate, clarify, structure solutions aloud, handle feedback, recover when stuck.', section: 'pairing' },
-  { icon: '👔', title: 'Leadership Prep', body: 'STAR stories, team leadership, technical decisions, conflict resolution, hiring, and culture.', section: 'leadership' },
+  { icon: '👔', title: 'Behavioral & Leadership', body: 'STAR stories for ICs and managers — ownership, conflict, decision-making, hiring (when relevant).', section: 'leadership' },
+  { icon: '🎯', title: 'Mock Interview Mode', body: 'Random question, timer, reveal-on-click. Filter by category, difficulty, and target FAANG company.', section: 'mock' },
+  { icon: '📊', title: 'Progress Dashboard', body: 'See completion per category, FAANG-tagged progress, weakest categories to drill next.', section: 'progress' },
+  { icon: '🏢', title: 'FAANG Playbooks', body: 'Per-company guides: what Meta optimizes for, Amazon LP framework, Google\'s "Googleyness", and more.', section: 'companies' },
   { icon: '🚨', title: 'Emergency Shortlists', body: 'Top 20 challenges only · 2-hour/day compressed plan · Interview-day playbook.', section: 'calendar' },
   { icon: '🎯', title: 'Interview-Day Strategy', body: 'Hour-by-hour playbook for the day of the interview. Mental prep, logistics, execution.', section: 'playbook' },
 ]
@@ -61,14 +68,14 @@ export default function Home({ onNavigate }) {
   return (
     <div>
       <div className="hero">
-        <div className="hero-label">Engineering Leadership Interview Prep</div>
-        <h1>7-Day Mastery Plan</h1>
-        <p>A complete, execution-focused preparation system for Engineering Leadership interviews. Covering technical depth, architecture breadth, and leadership maturity.</p>
+        <div className="hero-label">Engineer Interview Prep</div>
+        <h1>Interview prep for every engineering level</h1>
+        <p>Coding, system design, behavioral, and leadership prep — covering IC, Senior, Staff, Lead, and EM rounds. Filter by role and target company.</p>
         <div className="hero-stats">
           <div className="stat"><div className="stat-num"><CountUp target={7} /></div><div className="stat-label">Days</div></div>
           <div className="stat"><div className="stat-num"><CountUp target={totalChallenges} /></div><div className="stat-label">Challenges</div></div>
           <div className="stat"><div className="stat-num"><CountUp target={8} /></div><div className="stat-label">Interview Types</div></div>
-          <div className="stat"><div className="stat-num"><CountUp target={50} suffix="+" /></div><div className="stat-label">STAR Stories</div></div>
+          <div className="stat"><div className="stat-num"><CountUp target={6} /></div><div className="stat-label">FAANG Companies</div></div>
         </div>
       </div>
 

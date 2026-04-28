@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { leadershipTopics, leadershipQuestions } from '../data/data'
+import { leadershipTopics, leadershipQuestions, icBehavioralQuestions } from '../data/data'
+import { questionText, questionCompanies, questionKey } from '../utils/renderQ'
+import { COMPANY_LABELS } from '../data/companies'
+import { useRole } from '../context/RoleContext'
 
 const advancedCards = [
   { icon: '📡', title: 'Executive Communication', body: 'BLUF (Bottom Line Up Front). Speak in outcomes, not activities. Know how to present engineering health to non-technical leaders. Status = Green/Yellow/Red with context.' },
@@ -23,7 +26,14 @@ function ExpandItem({ item }) {
       </div>
       <div className="roadmap-body">
         <div className="roadmap-sub-label" style={{marginBottom:8}}>Key Questions</div>
-        <ul className="qs-list">{item.questions.map(q => <li key={q}>{q}</li>)}</ul>
+        <ul className="qs-list">{item.questions.map(q => (
+          <li key={questionKey(q)}>
+            {questionText(q)}
+            {questionCompanies(q).map(co => (
+              <span key={co} className={`badge company-${co}`} style={{marginLeft:6}}>{COMPANY_LABELS[co] ?? co}</span>
+            ))}
+          </li>
+        ))}</ul>
         <div className="roadmap-sub-label" style={{margin:'12px 0 6px'}}>Preparation Tips</div>
         <div className="roadmap-sub-body">{item.tips}</div>
       </div>
@@ -39,35 +49,142 @@ const starBlocks = [
 ]
 
 const mustPrepare = [
-  'A technical decision you made that had significant impact (positive or negative)',
-  'A time you managed an underperformer — what you did and how it ended',
-  'A major incident you led — how you handled pressure and the post-mortem',
-  'A time you pushed back on a product or business decision technically',
-  'A cross-functional conflict you resolved — between eng and product, or eng and eng',
-  'A delivery that was at risk — how you recovered it',
-  'A time you influenced a team or org without authority',
-  'A time you set or changed engineering culture/practices',
-  'Your biggest technical mistake and what you learned',
-  'A time you hired someone great (or made a hiring mistake)',
-  'A time you had to prioritize ruthlessly — what got cut and why',
-  'A time you mentored or grew an engineer significantly',
+  {
+    prompt: 'A technical decision you made that had significant impact (positive or negative)',
+    hints: [
+      'Pick something with a clear binary or tradeoff: build vs buy, monolith vs micro, sync vs async, SQL vs NoSQL.',
+      'Quantify both options up-front: cost, latency, time-to-market, risk. Rough numbers beat no numbers.',
+      'Show your decision framework — what data did you collect, who did you consult, what would have changed your mind?',
+      'End with the outcome AND what you learned. A reversed-and-fixed decision is often more compelling than a clean win.'
+    ]
+  },
+  {
+    prompt: 'A time you managed an underperformer — what you did and how it ended',
+    hints: [
+      'Lead with the early signals you noticed and how you confirmed it (specific behaviors, not vibes).',
+      'Walk through your intervention: SBI feedback, written expectations, check-in cadence, when HR got involved.',
+      'Show empathy AND accountability. Don\'t paint yourself as either too soft or too harsh.',
+      'Outcome can be: turnaround, role change, exit, or PIP — all valid. Discuss what you\'d do earlier next time.'
+    ]
+  },
+  {
+    prompt: 'A major incident you led — how you handled pressure and the post-mortem',
+    hints: [
+      'Set the stakes in 2 sentences (revenue impact, user count, duration). Skip system internals.',
+      'Walk the timeline: detection → triage decisions → mitigation → resolution. Highlight YOUR specific calls.',
+      'Discuss the post-mortem: root cause, action items, blameless framing, what shipped to prevent recurrence.',
+      'Avoid hero-narrative. The best answer shows you stayed calm AND made the team feel safe to surface info.'
+    ]
+  },
+  {
+    prompt: 'A time you pushed back on a product or business decision technically',
+    hints: [
+      'Frame the pushback as protecting the business outcome, not protecting engineering.',
+      'Show you brought options, not just objections: "we can do A risky-fast, B safe-slow, or C — I recommend C."',
+      'Demonstrate that you understood the product/business pressure even while disagreeing.',
+      'Either outcome (you persuaded them, or disagreed-and-committed) is valid — show the principle.'
+    ]
+  },
+  {
+    prompt: 'A cross-functional conflict you resolved — between eng and product, or eng and eng',
+    hints: [
+      'Name the underlying interests (not positions): "PM wanted velocity, eng wanted quality" → real conflict was misaligned incentives.',
+      'Show how you separated the people from the problem.',
+      'Describe the structured process: 1:1s, written proposal, neutral facilitator, escalation path.',
+      'End with the durable fix (process, ritual, or principle) — not just "they made up."'
+    ]
+  },
+  {
+    prompt: 'A delivery that was at risk — how you recovered it',
+    hints: [
+      'Set the risk dimension: scope-too-big, missing dependency, talent gap, customer scope creep.',
+      'Show how you re-plan: descope first, parallelize second, add people only as last resort (Brooks\'s Law).',
+      'Discuss the communication side: what did you tell the customer/exec, when, with what alternatives?',
+      'Quantify the recovery (shipped on time, shipped 2 weeks late but with X scope, etc.) and the lesson.'
+    ]
+  },
+  {
+    prompt: 'A time you influenced a team or org without authority',
+    hints: [
+      'Pick a story where you weren\'t the manager — peer influence is the high-value signal.',
+      'Show the ladder: 1:1 conversations → small proof of concept → wider doc/RFC → org-level rollout.',
+      'Highlight whose buy-in was hardest and how you got it (data, demo, finding their hidden constraint).',
+      'Quantify the spread: "convinced 3 ICs → 1 team → 4 teams → org standard."'
+    ]
+  },
+  {
+    prompt: 'A time you set or changed engineering culture/practices',
+    hints: [
+      'Pick something with a measurable behavior change: code review SLA, on-call runbook discipline, post-mortem cadence.',
+      'Show the diagnosis: what specific symptom told you the culture was broken? (e.g., 3-day code review delays, repeating incidents).',
+      'Walk through the change: pilot → measure → roll out → enforce. Bottom-up always beats top-down mandates.',
+      'Quantify before/after — and acknowledge the people who pushed back, and how you brought them along.'
+    ]
+  },
+  {
+    prompt: 'Your biggest technical mistake and what you learned',
+    hints: [
+      'Pick a real mistake with real impact — small bugs are not the right answer here.',
+      'Own it cleanly: "I shipped X without Y, which caused Z." No "we" deflection, no blame on the team.',
+      'Show what you knew at the time vs what you missed — humility is the signal, not self-flagellation.',
+      'Tie the lesson to a specific behavior change (now I always do X before Y). Avoid vague "I learned to be careful."'
+    ]
+  },
+  {
+    prompt: 'A time you hired someone great (or made a hiring mistake)',
+    hints: [
+      'For a great hire: what signals did you screen for that the rubric missed? What rubric change did this drive?',
+      'For a mistake: what signal did you miss, and how did you change your loop afterward?',
+      'Talk about the loop, not just the candidate: how did you calibrate, who was the bar raiser, how did you handle splits?',
+      'Avoid trash-talking the bad hire. Frame as a process gap that you fixed.'
+    ]
+  },
+  {
+    prompt: 'A time you had to prioritize ruthlessly — what got cut and why',
+    hints: [
+      'Set the constraint clearly (deadline, headcount, budget). Vague pressure is a weak setup.',
+      'Show the prioritization framework: RICE, ICE, opportunity cost, customer impact.',
+      'Be specific about WHAT got cut and what conversation it took with the owner of the cut work.',
+      'End with how you communicated the cut up and out — exec summary, customer messaging, sunset plan.'
+    ]
+  },
+  {
+    prompt: 'A time you mentored or grew an engineer significantly',
+    hints: [
+      'Pick someone whose level/scope changed measurably (junior → mid, senior IC → tech lead, etc.).',
+      'Show your model of growth: stretch assignments, sponsorship vs mentorship, feedback cadence, exposure.',
+      'Identify the inflection point — the conversation or assignment that unlocked them.',
+      'Quantify the outcome (promotion, project shipped, presented at all-hands) and your continued relationship.'
+    ]
+  },
 ]
 
 export default function Leadership() {
-  const [tab, setTab] = useState('topics')
+  const { role } = useRole()
+  const isLeadAudience = role === 'all' || role === 'lead' || role === 'em' || role === 'staff'
+  const allTabs = [
+    { id: 'star', label: 'STAR Framework', leadOnly: false },
+    { id: 'ic', label: 'IC Behavioral', leadOnly: false },
+    { id: 'questions', label: 'Leadership Q Bank', leadOnly: true },
+    { id: 'topics', label: 'Leadership Topics', leadOnly: true },
+    { id: 'advanced', label: 'Advanced Areas', leadOnly: true },
+  ]
+  const visibleTabs = allTabs.filter(t => !t.leadOnly || isLeadAudience)
+  const [tab, setTab] = useState('star')
+  const activeTab = visibleTabs.find(t => t.id === tab) ? tab : visibleTabs[0].id
   return (
     <div>
-      <div className="section-title">Engineering Leadership Interview Prep</div>
-      <div className="section-subtitle">STAR stories · Common questions · Answer frameworks</div>
+      <div className="section-title">Behavioral & Leadership</div>
+      <div className="section-subtitle">STAR stories · Common questions · Answer frameworks · Works for ICs and managers</div>
       <div className="tab-bar">
-        {[{id:'topics',label:'Key Topics'},{id:'star',label:'STAR Framework'},{id:'questions',label:'150 Questions'},{id:'advanced',label:'Advanced Areas'}].map(t => (
-          <button key={t.id} className={`tab-btn${tab === t.id ? ' active' : ''}`} onClick={() => setTab(t.id)}>{t.label}</button>
+        {visibleTabs.map(t => (
+          <button key={t.id} className={`tab-btn${activeTab === t.id ? ' active' : ''}`} onClick={() => setTab(t.id)}>{t.label}</button>
         ))}
       </div>
 
-      {tab === 'topics' && leadershipTopics.map(t => <ExpandItem key={t.topic} item={t} />)}
+      {activeTab === 'topics' && leadershipTopics.map(t => <ExpandItem key={t.topic} item={t} />)}
 
-      {tab === 'star' && (
+      {activeTab === 'star' && (
         <div>
           <div className="card">
             <div className="card-title" style={{color:'var(--accent4)'}}>⭐ STAR Framework for Leadership Stories</div>
@@ -86,25 +203,62 @@ export default function Leadership() {
           </div>
           <div className="card">
             <div className="card-title">📝 12 Must-Prepare STAR Stories</div>
-            <div className="card-body">
-              <ul className="qs-list">{mustPrepare.map(s => <li key={s}>{s}</li>)}</ul>
+            <div className="card-body" style={{paddingBottom: 4}}>Click any prompt to see hints on what to cover and what pitfalls to avoid.</div>
+            <div className="star-stories">
+              {mustPrepare.map(s => (
+                <details className="star-story" key={s.prompt}>
+                  <summary>{s.prompt}</summary>
+                  <ul className="hint-list">
+                    {s.hints.map(h => <li key={h}>{h}</li>)}
+                  </ul>
+                </details>
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      {tab === 'questions' && (
+      {activeTab === 'ic' && (
         <div>
-          {leadershipQuestions.map(cat => (
+          <div className="card" style={{marginBottom:14, background:'rgba(124,106,255,0.06)', borderColor:'rgba(124,106,255,0.25)'}}>
+            <div className="card-title">📌 IC-targeted behavioral questions</div>
+            <div className="card-body">For IC and Senior interviews. Frame answers around individual ownership, code-level decisions, and direct collaboration — not org-level outcomes. Use STAR.</div>
+          </div>
+          {icBehavioralQuestions.map(cat => (
             <div className="card" style={{marginBottom:14}} key={cat.category}>
               <div className="card-title">{cat.category}</div>
-              <ul className="qs-list">{cat.qs.map(q => <li key={q}>{q}</li>)}</ul>
+              <ul className="qs-list">{cat.qs.map(q => (
+                <li key={questionKey(q)}>
+                  {questionText(q)}
+                  {questionCompanies(q).map(co => (
+                    <span key={co} className={`badge company-${co}`} style={{marginLeft:6}}>{COMPANY_LABELS[co] ?? co}</span>
+                  ))}
+                </li>
+              ))}</ul>
             </div>
           ))}
         </div>
       )}
 
-      {tab === 'advanced' && (
+      {activeTab === 'questions' && (
+        <div>
+          {leadershipQuestions.map(cat => (
+            <div className="card" style={{marginBottom:14}} key={cat.category}>
+              <div className="card-title">{cat.category}</div>
+              <ul className="qs-list">{cat.qs.map(q => (
+                <li key={questionKey(q)}>
+                  {questionText(q)}
+                  {questionCompanies(q).map(co => (
+                    <span key={co} className={`badge company-${co}`} style={{marginLeft:6}}>{COMPANY_LABELS[co] ?? co}</span>
+                  ))}
+                </li>
+              ))}</ul>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {activeTab === 'advanced' && (
         <div className="principles-grid">
           {advancedCards.map(c => (
             <div className="principle-card" key={c.title}>
