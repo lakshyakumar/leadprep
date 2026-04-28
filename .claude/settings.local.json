@@ -47,7 +47,12 @@
       "Bash(curl -s http://localhost:5173/src/components/SearchModal.jsx)",
       "Bash(curl -s http://localhost:5173/src/components/Progress.jsx)",
       "Bash(curl -s http://localhost:5173/src/components/Mock.jsx)",
-      "Bash(curl -s http://localhost:5173/src/data/categories.js)"
+      "Bash(curl -s http://localhost:5173/src/data/categories.js)",
+      "Bash(curl -s http://localhost:5173/src/components/Career.jsx)",
+      "Bash(curl -s http://localhost:5173/src/data/companies.js)",
+      "Bash(awk 'END {print NR}' /Users/jincyjohny/Documents/code/github/leadprep/src/data/data.js)",
+      "Bash(curl -s http://localhost:5173/src/context/ThemeContext.jsx)",
+      "Bash(curl -s http://localhost:5173/src/index.css)"
     ]
   }
 }

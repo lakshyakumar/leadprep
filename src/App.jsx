@@ -1,19 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import Nav from './components/Nav'
 import Home from './components/Home'
-import Calendar from './components/Calendar'
-import Roadmap from './components/Roadmap'
-import Challenges from './components/Challenges'
-import Standards from './components/Standards'
-import Pairing from './components/Pairing'
-import Leadership from './components/Leadership'
-import Playbook from './components/Playbook'
-import Companies from './components/Companies'
-import Progress from './components/Progress'
-import Mock from './components/Mock'
 import Scratchpad from './components/Scratchpad'
 import Footer from './components/Footer'
-import SearchModal from './components/SearchModal'
+
+// Lazy-load SearchModal — pulls in data.js via the search index, so deferring this
+// keeps data.js out of the initial bundle.
+const SearchModal = lazy(() => import('./components/SearchModal'))
+
+// Lazy-load every section that isn't the landing page.
+// Each becomes its own chunk; first visit downloads only Home + nav + footer.
+const Calendar    = lazy(() => import('./components/Calendar'))
+const Roadmap     = lazy(() => import('./components/Roadmap'))
+const Challenges  = lazy(() => import('./components/Challenges'))
+const Standards   = lazy(() => import('./components/Standards'))
+const Pairing     = lazy(() => import('./components/Pairing'))
+const Leadership  = lazy(() => import('./components/Leadership'))
+const Playbook    = lazy(() => import('./components/Playbook'))
+const Companies   = lazy(() => import('./components/Companies'))
+const Progress    = lazy(() => import('./components/Progress'))
+const Mock        = lazy(() => import('./components/Mock'))
+const Career      = lazy(() => import('./components/Career'))
 
 // Primary nav: daily-use sections. Stays visible at all widths.
 const SECTIONS = [
@@ -24,6 +31,7 @@ const SECTIONS = [
   { id: 'progress', label: 'Progress' },
   { id: 'companies', label: 'Companies' },
   { id: 'leadership', label: 'Behavioral' },
+  { id: 'career', label: 'Career' },
 ]
 
 // Secondary nav: planning + reference. Lives under a "More" dropdown.
@@ -42,6 +50,7 @@ const SECTION_COMPONENTS = {
   mock: Mock,
   progress: Progress,
   companies: Companies,
+  career: Career,
   standards: Standards,
   pairing: Pairing,
   leadership: Leadership,
@@ -81,11 +90,17 @@ export default function App() {
     <>
       <Nav sections={SECTIONS} moreSections={MORE_SECTIONS} activeSection={activeSection} onNavigate={navigate} onOpenSearch={() => setSearchOpen(true)} />
       <main className={`section active`}>
-        <ActiveComponent onNavigate={navigate} navIntent={activeSection === 'challenges' ? navIntent : null} clearNavIntent={() => setNavIntent(null)} />
+        <Suspense fallback={<div className="section-loading">Loading…</div>}>
+          <ActiveComponent onNavigate={navigate} navIntent={activeSection === 'challenges' ? navIntent : null} clearNavIntent={() => setNavIntent(null)} />
+        </Suspense>
       </main>
       <Footer />
       <Scratchpad />
-      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} onNavigate={navigate} />
+      {searchOpen && (
+        <Suspense fallback={null}>
+          <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} onNavigate={navigate} />
+        </Suspense>
+      )}
     </>
   )
 }

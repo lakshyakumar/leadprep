@@ -1,13 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import {
-  jsChallenges, goChallenges, pythonChallenges, rustChallenges,
-  tsChallenges, reactChallenges, aiChallenges, devopsChallenges,
-  designChallenges, securityChallenges, sqlChallenges, archChallenges,
-  solidityChallenges, dynamicProgrammingChallenges, puzzleChallenges, algoChallenges,
-  codingChallenges, dbAdvancedChallenges, codingQuestions, debuggingChallenges,
-  bashChallenges, mathChallenges, mpcChallenges, apiDesignChallenges,
-  incidentChallenges, patternsChallenges
-} from '../data/data'
+
+// Hardcoded so Home.jsx doesn't pull in data.js at initial load.
+// Update when adding new challenge categories. Eyeball-accurate is fine — it's a vibe stat.
+const TOTAL_CHALLENGES = 1150
 
 function CountUp({ target, suffix = '', duration = 1800 }) {
   const [display, setDisplay] = useState(0)
@@ -41,14 +36,7 @@ function CountUp({ target, suffix = '', duration = 1800 }) {
   return <span ref={ref}>{display}{suffix}</span>
 }
 
-const totalChallenges =
-  codingChallenges.length + codingQuestions.length + dynamicProgrammingChallenges.length +
-  jsChallenges.length + goChallenges.length + pythonChallenges.length + rustChallenges.length +
-  tsChallenges.length + reactChallenges.length + aiChallenges.length + devopsChallenges.length +
-  designChallenges.length + securityChallenges.length + sqlChallenges.length + archChallenges.length +
-  solidityChallenges.length + puzzleChallenges.length + algoChallenges.length + dbAdvancedChallenges.length +
-  debuggingChallenges.length + bashChallenges.length + mathChallenges.length + mpcChallenges.length +
-  apiDesignChallenges.length + incidentChallenges.length + patternsChallenges.length
+const totalChallenges = TOTAL_CHALLENGES
 
 const features = [
   { icon: '📅', title: '7-Day Calendar', body: 'Day-by-day schedule with morning, afternoon, and evening sessions. Highest-ROI topics first.', section: 'calendar' },
@@ -59,6 +47,7 @@ const features = [
   { icon: '👔', title: 'Behavioral & Leadership', body: 'STAR stories for ICs and managers — ownership, conflict, decision-making, hiring (when relevant).', section: 'leadership' },
   { icon: '🎯', title: 'Mock Interview Mode', body: 'Random question, timer, reveal-on-click. Filter by category, difficulty, and target FAANG company.', section: 'mock' },
   { icon: '📊', title: 'Progress Dashboard', body: 'See completion per category, FAANG-tagged progress, weakest categories to drill next.', section: 'progress' },
+  { icon: '💼', title: 'Career — End-to-End', body: 'Recruiter screens, negotiation scripts, first-90-days plan. The parts of job-hunting most prep sites skip.', section: 'career' },
   { icon: '🏢', title: 'FAANG Playbooks', body: 'Per-company guides: what Meta optimizes for, Amazon LP framework, Google\'s "Googleyness", and more.', section: 'companies' },
   { icon: '🚨', title: 'Emergency Shortlists', body: 'Top 20 challenges only · 2-hour/day compressed plan · Interview-day playbook.', section: 'calendar' },
   { icon: '🎯', title: 'Interview-Day Strategy', body: 'Hour-by-hour playbook for the day of the interview. Mental prep, logistics, execution.', section: 'playbook' },
@@ -72,10 +61,43 @@ export default function Home({ onNavigate }) {
         <h1>Interview prep for every engineering level</h1>
         <p>Coding, system design, behavioral, and leadership prep — covering IC, Senior, Staff, Lead, and EM rounds. Filter by role and target company.</p>
         <div className="hero-stats">
-          <div className="stat"><div className="stat-num"><CountUp target={7} /></div><div className="stat-label">Days</div></div>
-          <div className="stat"><div className="stat-num"><CountUp target={totalChallenges} /></div><div className="stat-label">Challenges</div></div>
-          <div className="stat"><div className="stat-num"><CountUp target={8} /></div><div className="stat-label">Interview Types</div></div>
-          <div className="stat"><div className="stat-num"><CountUp target={6} /></div><div className="stat-label">FAANG Companies</div></div>
+          <button className="stat stat-link" onClick={() => onNavigate('calendar')} title="Open 7-Day Plan">
+            <div className="stat-num"><CountUp target={7} /></div>
+            <div className="stat-label">Day Plan →</div>
+          </button>
+          <button className="stat stat-link" onClick={() => onNavigate('challenges')} title="Open Challenges">
+            <div className="stat-num"><CountUp target={totalChallenges} suffix="+" /></div>
+            <div className="stat-label">Question Bank →</div>
+          </button>
+          <button className="stat stat-link" onClick={() => onNavigate('roadmap')} title="Open Roadmap">
+            <div className="stat-num"><CountUp target={8} /></div>
+            <div className="stat-label">Interview Types →</div>
+          </button>
+        </div>
+        <div className="hero-stats-note">
+          The <button className="hero-inline-link" onClick={() => onNavigate('calendar')}>7-day plan</button> picks a curated handful from the bank — enough to get you interview-ready in a week. The full <button className="hero-inline-link" onClick={() => onNavigate('challenges')}>{totalChallenges}+ bank</button> is yours for ongoing prep beyond that.
+        </div>
+      </div>
+
+      <div className="start-here">
+        <div className="start-here-label">Start Here · 5 minutes</div>
+        <div className="start-here-title">New to CRACKED? Try this 3-step flow</div>
+        <div className="start-here-steps">
+          <button className="start-here-step" onClick={() => onNavigate('companies')}>
+            <span className="start-here-step-num">1</span>
+            <span className="start-here-step-title">Pick a target company</span>
+            <span className="start-here-step-body">Read the FAANG playbook for the company you&apos;re prepping for. Different companies want different things.</span>
+          </button>
+          <button className="start-here-step" onClick={() => onNavigate('mock')}>
+            <span className="start-here-step-num">2</span>
+            <span className="start-here-step-title">Run a mock round</span>
+            <span className="start-here-step-body">Filter by your target + difficulty. Solve out loud, then reveal hints. Marks done automatically.</span>
+          </button>
+          <button className="start-here-step" onClick={() => onNavigate('progress')}>
+            <span className="start-here-step-num">3</span>
+            <span className="start-here-step-title">Track + return</span>
+            <span className="start-here-step-body">Progress shows your weakest categories and what&apos;s due for review. Iterate daily.</span>
+          </button>
         </div>
       </div>
 

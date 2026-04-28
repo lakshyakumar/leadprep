@@ -1,18 +1,5 @@
 import { useMemo } from 'react'
-import { CHALLENGE_GROUPS, ALL_CHALLENGES, challengeDoneKey } from '../data/categories'
-
-function readDone() {
-  const map = {}
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i)
-      if (k && k.startsWith('challenge-done-') && localStorage.getItem(k) === 'true') {
-        map[k] = true
-      }
-    }
-  } catch {}
-  return map
-}
+import { CHALLENGE_GROUPS, ALL_CHALLENGES, challengeDoneKey, readAllDoneStates, isDueForReview, REVIEW_THRESHOLD_MS } from '../data/categories'
 
 function ProgressBar({ pct, accent = 'var(--accent)' }) {
   return (
@@ -23,31 +10,59 @@ function ProgressBar({ pct, accent = 'var(--accent)' }) {
 }
 
 export default function Progress({ onNavigate }) {
-  const done = useMemo(readDone, [])
+  const doneStates = useMemo(readAllDoneStates, [])
+  const now = Date.now()
 
   const groupStats = useMemo(() => CHALLENGE_GROUPS.map(g => {
     const items = g.items.map(item => {
       const total = item.data.length
-      const doneCount = item.data.filter(ch => done[challengeDoneKey(ch)]).length
+      const doneCount = item.data.filter(ch => doneStates[challengeDoneKey(ch)]).length
       return { ...item, total, done: doneCount, pct: total ? doneCount / total : 0 }
     })
     const total = items.reduce((n, i) => n + i.total, 0)
     const doneCount = items.reduce((n, i) => n + i.done, 0)
     return { ...g, items, total, done: doneCount, pct: total ? doneCount / total : 0 }
-  }), [done])
+  }), [doneStates])
 
   const overallTotal = ALL_CHALLENGES.length
-  const overallDone = ALL_CHALLENGES.filter(ch => done[challengeDoneKey(ch)]).length
+  const overallDone = ALL_CHALLENGES.filter(ch => doneStates[challengeDoneKey(ch)]).length
   const overallPct = overallTotal ? overallDone / overallTotal : 0
 
   const taggedItems = ALL_CHALLENGES.filter(ch => ch.companies?.length > 0)
-  const taggedDone = taggedItems.filter(ch => done[challengeDoneKey(ch)]).length
+  const taggedDone = taggedItems.filter(ch => doneStates[challengeDoneKey(ch)]).length
   const taggedPct = taggedItems.length ? taggedDone / taggedItems.length : 0
+
+  const dueForReview = useMemo(() => {
+    return ALL_CHALLENGES
+      .map(ch => ({ ch, state: doneStates[challengeDoneKey(ch)] }))
+      .filter(({ state }) => isDueForReview(state, now))
+      .sort((a, b) => a.state.doneAt - b.state.doneAt) // oldest first
+  }, [doneStates, now])
 
   // Weakest categories (have content, 0 done, sorted by size desc)
   const allItems = groupStats.flatMap(g => g.items)
   const weakest = allItems.filter(i => i.total > 0 && i.done === 0).sort((a, b) => b.total - a.total).slice(0, 5)
   const strongest = allItems.filter(i => i.total > 0 && i.pct > 0).sort((a, b) => b.pct - a.pct || b.done - a.done).slice(0, 5)
+
+  if (overallDone === 0) {
+    return (
+      <div>
+        <div className="section-title">Your Progress</div>
+        <div className="section-subtitle">Tracked locally · No data yet</div>
+        <div className="empty-state">
+          <div className="empty-state-icon">📊</div>
+          <div className="empty-state-title">You haven&apos;t marked any challenges done yet</div>
+          <div className="empty-state-body">
+            Open a challenge and click the checkbox to mark it done — or run a mock round and the questions you complete will be tracked automatically.
+          </div>
+          <div className="empty-state-actions">
+            <button className="empty-state-btn primary" onClick={() => onNavigate('mock', null)}>▶ Start a mock round</button>
+            <button className="empty-state-btn" onClick={() => onNavigate('challenges', null)}>Browse challenges</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -68,6 +83,39 @@ export default function Progress({ onNavigate }) {
           <div className="progress-summary-pct">{Math.round(taggedPct * 100)}% of company-tagged questions</div>
         </div>
       </div>
+
+      {dueForReview.length > 0 && (
+        <div className="progress-review">
+          <div className="progress-review-header">
+            <div>
+              <div className="progress-review-title">🔁 Due for review</div>
+              <div className="progress-review-subtitle">
+                {dueForReview.length} question{dueForReview.length === 1 ? '' : 's'} you completed more than 7 days ago. Re-do them to lock in retention.
+              </div>
+            </div>
+            <button className="progress-review-cta" onClick={() => onNavigate('mock', null)}>
+              Drill these in Mock →
+            </button>
+          </div>
+          <ul className="progress-review-list">
+            {dueForReview.slice(0, 8).map(({ ch, state }) => {
+              const days = state.doneAt === 0 ? '?' : Math.floor((now - state.doneAt) / (24 * 60 * 60 * 1000))
+              return (
+                <li key={`${ch.lang}-${ch.id}`}>
+                  <button className="progress-review-item" onClick={() => onNavigate('challenges', { challengeId: ch.id, lang: ch.lang })}>
+                    <span className="progress-review-meta">{ch.lang} · {ch.diff}</span>
+                    <span className="progress-review-title-text">{ch.title}</span>
+                    <span className="progress-review-age">{days === '?' ? 'pre-tracking' : `${days}d ago`}</span>
+                  </button>
+                </li>
+              )
+            })}
+            {dueForReview.length > 8 && (
+              <li className="progress-review-more">+ {dueForReview.length - 8} more</li>
+            )}
+          </ul>
+        </div>
+      )}
 
       {(weakest.length > 0 || strongest.length > 0) && (
         <div className="progress-callouts">

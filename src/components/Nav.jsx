@@ -1,6 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useRole, ROLES, ROLE_LABELS } from '../context/RoleContext'
+import { useTheme } from '../context/ThemeContext'
+
+function ThemeToggle() {
+  const { theme, toggle } = useTheme()
+  return (
+    <button
+      className="theme-toggle"
+      onClick={toggle}
+      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+      aria-label="Toggle theme"
+    >
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </button>
+  )
+}
 
 function MoreMenu({ sections, activeSection, onNavigate }) {
   const [open, setOpen] = useState(false)
@@ -156,6 +171,7 @@ export default function Nav({ sections, moreSections = [], activeSection, onNavi
         <span className="nav-search-icon">🔎</span>
         <kbd className="nav-search-kbd">/</kbd>
       </button>
+      <ThemeToggle />
       <RoleDropdown />
     </nav>
   )

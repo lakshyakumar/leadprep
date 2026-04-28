@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { CHALLENGE_GROUPS, ALL_CHALLENGES, challengeDoneKey } from '../data/categories'
-import { COMPANIES, COMPANY_LABELS } from '../data/companies'
+import { CHALLENGE_GROUPS, ALL_CHALLENGES, markDone } from '../data/categories'
+import { COMPANIES, COMPANY_LABELS, describeSource } from '../data/companies'
+import { getSolution } from '../data/solutions'
 
 const DIFFS = ['any', 'easy', 'medium', 'hard']
 const TIME_BUDGET = { easy: 15 * 60, medium: 30 * 60, hard: 45 * 60 }
@@ -63,9 +64,7 @@ export default function Mock() {
   const next = (markedAs) => {
     if (current) {
       setHistory(h => [...h, { challenge: current, seconds, marked: markedAs }])
-      if (markedAs === 'done') {
-        try { localStorage.setItem(challengeDoneKey(current), 'true') } catch {}
-      }
+      if (markedAs === 'done') markDone(current)
     }
     const c = pickRandom(pool, current ? `${current.lang}-${current.id}` : null)
     setCurrent(c)
@@ -135,6 +134,11 @@ export default function Mock() {
 
         <div className="mock-pool">
           <span className="mock-pool-count">{pool.length}</span> question{pool.length === 1 ? '' : 's'} match your filters
+          {pool.length === 0 && (
+            <div className="mock-pool-hint">
+              No matches. Try widening filters — most company filters tag only ~15-30 questions per company. Set Company to <strong>Any</strong> for the broadest pool.
+            </div>
+          )}
         </div>
 
         <button className="mock-start" onClick={start} disabled={pool.length === 0}>
@@ -178,7 +182,7 @@ export default function Mock() {
           <span className="badge badge-accent">{current.lang}</span>
           <span className={`badge ${current.diff === 'easy' ? 'badge-easy' : current.diff === 'medium' ? 'badge-medium' : 'badge-hard'}`}>{current.diff}</span>
           {current.companies?.map(co => (
-            <span key={co} className={`badge company-${co}`}>{COMPANY_LABELS[co] ?? co}</span>
+            <span key={co} className={`badge company-${co}`} title={`${COMPANY_LABELS[co] ?? co}\nSource: ${describeSource(current.source)}`}>{COMPANY_LABELS[co] ?? co}</span>
           ))}
         </div>
         <h2 className="mock-q-title">{current.title}</h2>
@@ -220,21 +224,43 @@ export default function Mock() {
             {current.examples && (
               <div className="mock-solution-block">
                 <div className="ch-detail-label" style={{color: 'var(--accent3)'}}>Worked Examples</div>
-                <pre style={{fontFamily: 'monospace', fontSize: 13, whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: 12, borderRadius: 6, lineHeight: 1.5}}>{current.examples}</pre>
+                <pre style={{fontFamily: 'monospace', fontSize: 13, whiteSpace: 'pre-wrap', background: 'var(--code-bg)', padding: 12, borderRadius: 6, lineHeight: 1.5}}>{current.examples}</pre>
               </div>
             )}
             {current.testInputs && (
               <div className="mock-solution-block">
                 <div className="ch-detail-label" style={{color: 'var(--accent4)'}}>Edge Cases to Consider</div>
-                <pre style={{fontFamily: 'monospace', fontSize: 13, whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: 12, borderRadius: 6, lineHeight: 1.5}}>{current.testInputs}</pre>
+                <pre style={{fontFamily: 'monospace', fontSize: 13, whiteSpace: 'pre-wrap', background: 'var(--code-bg)', padding: 12, borderRadius: 6, lineHeight: 1.5}}>{current.testInputs}</pre>
               </div>
             )}
             {current.explanation && (
               <div className="mock-solution-block">
-                <div className="ch-detail-label" style={{color: '#a0aec0'}}>Approach / Key Takeaway</div>
+                <div className="ch-detail-label" style={{color: 'var(--text-muted)'}}>Approach / Key Takeaway</div>
                 <div className="ch-detail-val">{current.explanation}</div>
               </div>
             )}
+            {(() => {
+              const solution = getSolution(current)
+              if (!solution) return null
+              return (
+                <div className="mock-solution-block">
+                  <div className="ch-detail-label" style={{color: 'var(--easy)'}}>Reference Implementation (JavaScript)</div>
+                  <pre style={{
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: '12.5px',
+                    lineHeight: '1.55',
+                    background: 'var(--code-bg)',
+                    border: '1px solid var(--border)',
+                    padding: '14px 16px',
+                    borderRadius: '6px',
+                    overflowX: 'auto',
+                    whiteSpace: 'pre',
+                    color: 'var(--text)',
+                    margin: '8px 0 0',
+                  }}>{solution}</pre>
+                </div>
+              )
+            })()}
           </div>
 
           <div className="mock-actions">

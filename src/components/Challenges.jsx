@@ -8,8 +8,11 @@ import {
   codingChallenges, codingQuestions, debuggingChallenges,
   bashChallenges, mathChallenges, aiChallenges, mpcChallenges,
   apiDesignChallenges, incidentChallenges, patternsChallenges,
+  backendChallenges, frontendChallenges, fullstackChallenges, nodeChallenges,
 } from '../data/data'
-import { COMPANIES, COMPANY_LABELS } from '../data/companies'
+import { COMPANIES, COMPANY_LABELS, describeSource } from '../data/companies'
+import { getSolution } from '../data/solutions'
+import { readDoneState, markDone, markUndone } from '../data/categories'
 
 const ALL = [
   ...codingChallenges, ...codingQuestions, ...dynamicProgrammingChallenges,
@@ -20,6 +23,7 @@ const ALL = [
   ...debuggingChallenges, ...bashChallenges, ...mathChallenges,
   ...aiChallenges, ...mpcChallenges,
   ...apiDesignChallenges, ...incidentChallenges, ...patternsChallenges,
+  ...backendChallenges, ...frontendChallenges, ...fullstackChallenges, ...nodeChallenges,
 ]
 
 const GROUPS = [
@@ -35,10 +39,18 @@ const GROUPS = [
     label: 'Languages', items: [
       { id: 'js',     label: 'JavaScript', icon: '🟨', count: jsChallenges.length,     data: jsChallenges },
       { id: 'ts',     label: 'TypeScript', icon: '🔷', count: tsChallenges.length,     data: tsChallenges },
+      { id: 'node',   label: 'Node.js',    icon: '🟩', count: nodeChallenges.length,   data: nodeChallenges },
       { id: 'react',  label: 'React',      icon: '⚛️', count: reactChallenges.length,  data: reactChallenges },
       { id: 'python', label: 'Python',     icon: '🐍', count: pythonChallenges.length, data: pythonChallenges },
       { id: 'go',     label: 'Golang',     icon: '🔵', count: goChallenges.length,     data: goChallenges },
       { id: 'rust',   label: 'Rust',       icon: '🦀', count: rustChallenges.length,   data: rustChallenges },
+    ]
+  },
+  {
+    label: 'Specializations', items: [
+      { id: 'backend',   label: 'Backend Dev',   icon: '🛠️', count: backendChallenges.length,   data: backendChallenges },
+      { id: 'frontend',  label: 'Frontend Dev',  icon: '🎨', count: frontendChallenges.length,  data: frontendChallenges },
+      { id: 'fullstack', label: 'Fullstack Dev', icon: '🔁', count: fullstackChallenges.length, data: fullstackChallenges },
     ]
   },
   {
@@ -92,7 +104,7 @@ function renderInline(text) {
         fontFamily: 'monospace',
         fontSize: '0.88em',
         background: 'rgba(124,106,255,0.15)',
-        color: '#a78bfa',
+        color: 'var(--accent)',
         borderRadius: '3px',
         padding: '1px 5px',
         border: '1px solid rgba(124,106,255,0.2)',
@@ -121,7 +133,7 @@ function renderText(text) {
           whiteSpace: 'pre-wrap',
           overflowX: 'auto',
           margin: '8px 0',
-          color: '#e2e8f0',
+          color: 'var(--text)',
         }}>{para}</pre>
       )
     }
@@ -142,22 +154,14 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceOpen])
-  const [done, setDone] = useState(() => {
-    try {
-      return localStorage.getItem(`challenge-done-${ch.lang}-${ch.id}`) === 'true'
-    } catch {
-      return false
-    }
-  })
+  const [done, setDone] = useState(() => !!readDoneState(ch))
 
   const toggleDone = (e) => {
     e.stopPropagation()
     const newVal = !done
     setDone(newVal)
-    try {
-      if (newVal) localStorage.setItem(`challenge-done-${ch.lang}-${ch.id}`, 'true')
-      else localStorage.removeItem(`challenge-done-${ch.lang}-${ch.id}`)
-    } catch (err) {}
+    if (newVal) markDone(ch)
+    else markUndone(ch)
   }
 
   const diffClass = ch.diff === 'easy' ? 'badge-easy' : ch.diff === 'medium' ? 'badge-medium' : 'badge-hard'
@@ -171,6 +175,7 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
     AI: 'badge-ai', 'Math/ML': 'badge-math', MPC: 'badge-zk',
     DSA: 'badge-accent', Debugging: 'badge-security', Bash: 'badge-devops',
     API: 'badge-design', OnCall: 'badge-security', Pattern: 'badge-arch',
+    Backend: 'badge-arch', Frontend: 'badge-design', Fullstack: 'badge-accent', Node: 'badge-green',
   }
   return (
     <div ref={rowRef} className={`challenge-item${open?' expanded':''}${done?' done':''}${forceOpen?' highlighted':''}`} style={{ opacity: done ? 0.7 : 1, transition: 'opacity 0.2s' }}>
@@ -213,7 +218,7 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
         {ch.companies?.length > 0 && (
           <span style={{display:'flex', gap:'4px', flexWrap:'wrap'}}>
             {ch.companies.map(co => (
-              <span key={co} className={`badge company-${co}`} title={COMPANY_LABELS[co] ?? co}>{COMPANY_LABELS[co] ?? co}</span>
+              <span key={co} className={`badge company-${co}`} title={`${COMPANY_LABELS[co] ?? co}\nSource: ${describeSource(ch.source)}`}>{COMPANY_LABELS[co] ?? co}</span>
             ))}
           </span>
         )}
@@ -241,21 +246,43 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
             {ch.examples && (
               <div style={{gridColumn:'1/-1', marginTop: '4px'}}>
                 <div className="ch-detail-label" style={{color: 'var(--accent3)'}}>Examples, Edge Cases & Test Scenarios</div>
-                <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.examples}</div>
+                <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'var(--code-bg)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.examples}</div>
               </div>
             )}
             {ch.testInputs && (
               <div style={{gridColumn:'1/-1', marginTop: '4px'}}>
                 <div className="ch-detail-label" style={{color: 'var(--accent4)'}}>Test Inputs, Answers & Edge Cases</div>
-                <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.testInputs}</div>
+                <div className="ch-detail-val" style={{fontFamily: 'monospace', whiteSpace: 'pre-wrap', background: 'var(--code-bg)', padding: '12px', borderRadius: '6px', fontSize: '13px', lineHeight: '1.5'}}>{ch.testInputs}</div>
               </div>
             )}
             {ch.explanation && (
-              <div style={{gridColumn:'1/-1', marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px'}}>
-                <div className="ch-detail-label" style={{color: '#a0aec0'}}>Key Takeaway / Explanation</div>
-                <div className="ch-detail-val" style={{color: '#e2e8f0', fontSize: '14px', lineHeight: '1.5'}}>{renderText(ch.explanation)}</div>
+              <div style={{gridColumn:'1/-1', marginTop: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px'}}>
+                <div className="ch-detail-label" style={{color: 'var(--text-muted)'}}>Key Takeaway / Explanation</div>
+                <div className="ch-detail-val" style={{color: 'var(--text)', fontSize: '14px', lineHeight: '1.5'}}>{renderText(ch.explanation)}</div>
               </div>
             )}
+            {(() => {
+              const solution = getSolution(ch)
+              if (!solution) return null
+              return (
+                <div style={{gridColumn:'1/-1', marginTop: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px'}}>
+                  <div className="ch-detail-label" style={{color: 'var(--easy)'}}>Reference Implementation (JavaScript)</div>
+                  <pre style={{
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: '12.5px',
+                    lineHeight: '1.55',
+                    background: 'var(--code-bg)',
+                    border: '1px solid var(--border)',
+                    padding: '14px 16px',
+                    borderRadius: '6px',
+                    overflowX: 'auto',
+                    whiteSpace: 'pre',
+                    color: 'var(--text)',
+                    margin: '8px 0 0',
+                  }}>{solution}</pre>
+                </div>
+              )
+            })()}
           </div>
         </div>
       )}

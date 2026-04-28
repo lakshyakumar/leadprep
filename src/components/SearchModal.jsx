@@ -6,6 +6,7 @@ const KIND_LABELS = {
   challenge: 'Challenge',
   roadmap: 'Roadmap',
   behavioral: 'Behavioral',
+  career: 'Career',
 }
 
 export default function SearchModal({ open, onClose, onNavigate }) {
@@ -51,6 +52,8 @@ export default function SearchModal({ open, onClose, onNavigate }) {
       onNavigate('roadmap', null)
     } else if (r.kind === 'behavioral') {
       onNavigate('leadership', null)
+    } else if (r.kind === 'career') {
+      onNavigate('career', null)
     }
     onClose()
   }

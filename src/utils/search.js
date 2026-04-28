@@ -7,7 +7,9 @@ import {
   codingChallenges, codingQuestions, debuggingChallenges,
   bashChallenges, mathChallenges, aiChallenges, mpcChallenges,
   apiDesignChallenges, incidentChallenges, patternsChallenges,
+  backendChallenges, frontendChallenges, fullstackChallenges, nodeChallenges,
   roadmapData, leadershipQuestions, leadershipTopics, icBehavioralQuestions,
+  careerContent,
 } from '../data/data'
 
 // Maps a challenge `lang` value to the category id used by Challenges.jsx GROUPS.
@@ -21,6 +23,7 @@ export const LANG_TO_CATEGORY = {
   Arch: 'arch', Design: 'design', Debugging: 'debugging',
   'Math/ML': 'math', API: 'apidesign', OnCall: 'oncall',
   Pattern: 'patterns',
+  Backend: 'backend', Frontend: 'frontend', Fullstack: 'fullstack', Node: 'node',
   Solidity: 'solidity', AI: 'ai', MPC: 'mpc',
   Puzzle: 'puzzle',
 }
@@ -31,6 +34,7 @@ const CHALLENGE_ARRAYS = [
   devopsChallenges, bashChallenges, securityChallenges, sqlChallenges,
   dbAdvancedChallenges, archChallenges, designChallenges, debuggingChallenges,
   mathChallenges, apiDesignChallenges, incidentChallenges, patternsChallenges,
+  backendChallenges, frontendChallenges, fullstackChallenges, nodeChallenges,
   solidityChallenges, aiChallenges, mpcChallenges, puzzleChallenges,
 ]
 
@@ -93,6 +97,24 @@ export function getSearchIndex() {
         kind: 'behavioral',
         title: questionText(q),
         section: `IC Behavioral · ${cat.category}`,
+      })
+    }
+  }
+
+  // Career topics — pipeline / negotiation / first 90 days
+  const careerTabs = [
+    { key: 'pipeline', label: 'Pipeline' },
+    { key: 'negotiation', label: 'Negotiation' },
+    { key: 'first90Days', label: 'First 90 Days' },
+  ]
+  for (const t of careerTabs) {
+    for (const topic of careerContent[t.key] ?? []) {
+      items.push({
+        kind: 'career',
+        title: topic.title,
+        concepts: topic.summary ?? '',
+        section: `Career · ${t.label}`,
+        tab: t.key,
       })
     }
   }
