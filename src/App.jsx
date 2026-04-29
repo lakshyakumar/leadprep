@@ -3,6 +3,7 @@ import Nav from './components/Nav'
 import Home from './components/Home'
 import Scratchpad from './components/Scratchpad'
 import Footer from './components/Footer'
+import { useUrlSection } from './utils/urlState'
 
 // Lazy-load SearchModal — pulls in data.js via the search index, so deferring this
 // keeps data.js out of the initial bundle.
@@ -58,13 +59,24 @@ const SECTION_COMPONENTS = {
 }
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('home')
+  const [activeSection, setUrlSection] = useUrlSection('home')
   const [navIntent, setNavIntent] = useState(null)
   const [searchOpen, setSearchOpen] = useState(false)
-  const ActiveComponent = SECTION_COMPONENTS[activeSection]
+
+  // If hash points at an unknown section, fall back to home (avoids blank page)
+  const safeSection = SECTION_COMPONENTS[activeSection] ? activeSection : 'home'
+  const ActiveComponent = SECTION_COMPONENTS[safeSection]
 
   const navigate = (sectionId, intent = null) => {
-    setActiveSection(sectionId)
+    // Translate a navIntent into URL params for the destination section.
+    // Currently only Challenges consumes intent; other sections get clean URLs.
+    const params = {}
+    if (sectionId === 'challenges' && intent) {
+      if (intent.category) params.cat = intent.category
+      if (intent.diff) params.diff = intent.diff
+      if (intent.challengeId && intent.lang) params.q = `${intent.lang}-${intent.challengeId}`
+    }
+    setUrlSection(sectionId, params)
     setNavIntent(intent)
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }

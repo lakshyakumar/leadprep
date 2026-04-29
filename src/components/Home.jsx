@@ -45,10 +45,10 @@ const features = [
   { icon: '📐', title: 'Coding Standards', body: 'Clean Code, SOLID, DRY/KISS/YAGNI, JS best practices, idiomatic Go, API design.', section: 'standards' },
   { icon: '🤝', title: 'Pair Programming', body: 'How to communicate, clarify, structure solutions aloud, handle feedback, recover when stuck.', section: 'pairing' },
   { icon: '👔', title: 'Behavioral & Leadership', body: 'STAR stories for ICs and managers — ownership, conflict, decision-making, hiring (when relevant).', section: 'leadership' },
-  { icon: '🎯', title: 'Mock Interview Mode', body: 'Random question, timer, reveal-on-click. Filter by category, difficulty, and target FAANG company.', section: 'mock' },
-  { icon: '📊', title: 'Progress Dashboard', body: 'See completion per category, FAANG-tagged progress, weakest categories to drill next.', section: 'progress' },
+  { icon: '🎯', title: 'Mock Interview Mode', body: 'Random question, timer, reveal-on-click. Filter by category, difficulty, and target company.', section: 'mock' },
+  { icon: '📊', title: 'Progress Dashboard', body: 'See completion per category, company-tagged progress, weakest categories to drill next.', section: 'progress' },
   { icon: '💼', title: 'Career — End-to-End', body: 'Recruiter screens, negotiation scripts, first-90-days plan. The parts of job-hunting most prep sites skip.', section: 'career' },
-  { icon: '🏢', title: 'FAANG Playbooks', body: 'Per-company guides: what Meta optimizes for, Amazon LP framework, Google\'s "Googleyness", and more.', section: 'companies' },
+  { icon: '🏢', title: 'Company Playbooks', body: 'MAANG + tier-1 startups: Stripe, OpenAI, Anthropic, Airbnb, Uber, and more. What each optimizes for and how they interview.', section: 'companies' },
   { icon: '🚨', title: 'Emergency Shortlists', body: 'Top 20 challenges only · 2-hour/day compressed plan · Interview-day playbook.', section: 'calendar' },
   { icon: '🎯', title: 'Interview-Day Strategy', body: 'Hour-by-hour playbook for the day of the interview. Mental prep, logistics, execution.', section: 'playbook' },
 ]
@@ -69,6 +69,10 @@ export default function Home({ onNavigate }) {
             <div className="stat-num"><CountUp target={totalChallenges} suffix="+" /></div>
             <div className="stat-label">Question Bank →</div>
           </button>
+          <button className="stat stat-link" onClick={() => onNavigate('companies')} title="Open Company Playbooks">
+            <div className="stat-num"><CountUp target={14} /></div>
+            <div className="stat-label">Companies →</div>
+          </button>
           <button className="stat stat-link" onClick={() => onNavigate('roadmap')} title="Open Roadmap">
             <div className="stat-num"><CountUp target={8} /></div>
             <div className="stat-label">Interview Types →</div>
@@ -86,7 +90,7 @@ export default function Home({ onNavigate }) {
           <button className="start-here-step" onClick={() => onNavigate('companies')}>
             <span className="start-here-step-num">1</span>
             <span className="start-here-step-title">Pick a target company</span>
-            <span className="start-here-step-body">Read the FAANG playbook for the company you&apos;re prepping for. Different companies want different things.</span>
+            <span className="start-here-step-body">Read the playbook for the company you&apos;re prepping for — MAANG or tier-1 startup. Each interviews differently.</span>
           </button>
           <button className="start-here-step" onClick={() => onNavigate('mock')}>
             <span className="start-here-step-num">2</span>

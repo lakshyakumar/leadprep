@@ -77,7 +77,7 @@ export default function Progress({ onNavigate }) {
           <div className="progress-summary-pct">{Math.round(overallPct * 100)}% complete</div>
         </div>
         <div className="progress-summary-card">
-          <div className="progress-summary-label">FAANG-tagged</div>
+          <div className="progress-summary-label">Company-tagged</div>
           <div className="progress-summary-num">{taggedDone} <span className="progress-summary-total">/ {taggedItems.length}</span></div>
           <ProgressBar pct={taggedPct} accent="var(--accent3)" />
           <div className="progress-summary-pct">{Math.round(taggedPct * 100)}% of company-tagged questions</div>

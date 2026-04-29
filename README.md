@@ -1,6 +1,6 @@
 # CRACKED — Engineer Interview Prep
 
-A 7-day, execution-focused interview prep system for **every engineer** — from IC to Staff to Lead. Coding, system design, behavioral, and leadership prep, filterable by role and by target FAANG company. Built as a **React + Vite** single-page app.
+A 7-day, execution-focused interview prep system for **every engineer** — from IC to Staff to Lead. Coding, system design, behavioral, and leadership prep, filterable by role and target company (MAANG + tier-1 startups: Stripe, OpenAI, Anthropic, Airbnb, Uber, Databricks, Coinbase, DoorDash). Built as a **React + Vite** single-page app.
 
 (formerly LEADPREP)
 
@@ -33,7 +33,7 @@ A role pill in the nav (`All / IC / Senior / Staff / Lead / EM`) filters role-sp
 | **Overview** | Hero stats + clickable feature tiles |
 | **7-Day Plan** | Full plan · 2hr/day compressed · Emergency top-20 |
 | **Roadmap** | 8 interview categories — what's evaluated, how to prepare, common mistakes |
-| **Challenges** | 600+ coding/design/debugging problems, filterable by category, difficulty, and FAANG company |
+| **Challenges** | 1100+ coding/design/debugging problems, filterable by category, difficulty, and company (MAANG + startups) |
 | **Standards** | Clean Code, SOLID, DRY/KISS/YAGNI, language guides |
 | **Pair Programming** | Communication templates, narration tips, recovery protocol |
 | **Behavioral & Leadership** | STAR framework, behavioral question banks for ICs and managers, advanced leadership areas |
@@ -41,7 +41,7 @@ A role pill in the nav (`All / IC / Senior / Staff / Lead / EM`) filters role-sp
 
 ## 🏷️ Company tagging
 
-Every question can be tagged with the FAANG company where it was originally asked: Meta, Google, Amazon, Apple, Netflix, Microsoft, plus "Other". Filter the Challenges page by company to focus your prep.
+Every question can be tagged with the company where it was originally asked. The taxonomy covers MAANG / Big Tech (Meta, Google, Amazon, Apple, Netflix, Microsoft) plus tier-1 startups (Stripe, Airbnb, Uber, OpenAI, Anthropic, Databricks, Coinbase, DoorDash), plus "Other". Filter the Challenges page by company to focus your prep.
 
 **Contributing tags**: a `companies` tag must include a `source` field citing the public reference (LeetCode company tag page, Glassdoor interview report, Blind post, Levels.fyi thread, etc.). Tags without a citation will not be merged. An empty array is honest; speculative tags poison user trust.
 
@@ -69,7 +69,7 @@ src/
 ├── index.css                    # Global design system (dark theme, CSS vars)
 ├── data/
 │   ├── data.js                  # All content (challenges, roadmap, checklists)
-│   └── companies.js             # FAANG taxonomy
+│   └── companies.js             # Company taxonomy (MAANG + startups)
 ├── context/
 │   └── RoleContext.jsx          # Role pill state, persisted to localStorage
 ├── utils/

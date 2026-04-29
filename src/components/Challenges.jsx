@@ -13,6 +13,7 @@ import {
 import { COMPANIES, COMPANY_LABELS, describeSource } from '../data/companies'
 import { getSolution } from '../data/solutions'
 import { readDoneState, markDone, markUndone } from '../data/categories'
+import { useUrlParam, buildShareUrl } from '../utils/urlState'
 
 const ALL = [
   ...codingChallenges, ...codingQuestions, ...dynamicProgrammingChallenges,
@@ -145,6 +146,7 @@ function renderText(text) {
 
 function ChallengeItem({ ch, forceOpen, onOpened }) {
   const [open, setOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
   const rowRef = useRef(null)
   useEffect(() => {
     if (forceOpen) {
@@ -155,6 +157,17 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceOpen])
   const [done, setDone] = useState(() => !!readDoneState(ch))
+
+  const copyLink = (e) => {
+    e.stopPropagation()
+    const url = buildShareUrl('challenges', { q: `${ch.lang}-${ch.id}` })
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 1800)
+      }).catch(() => {})
+    }
+  }
 
   const toggleDone = (e) => {
     e.stopPropagation()
@@ -234,8 +247,17 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
       {open && (
         <div className="ch-detail show">
           <div className="ch-detail-grid">
-            <div style={{gridColumn: '1/-1', marginBottom: '8px'}}>
+            <div style={{gridColumn: '1/-1', marginBottom: '8px', display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap: '12px'}}>
               <div className="ch-detail-label" style={{fontSize:'12px', color:'var(--accent)', fontWeight:'700'}}>Problem Statement</div>
+              <button
+                className="ch-share-btn"
+                onClick={copyLink}
+                title="Copy a shareable link to this challenge"
+              >
+                {copied ? '✓ Copied' : '🔗 Copy link'}
+              </button>
+            </div>
+            <div style={{gridColumn: '1/-1', marginBottom: '8px'}}>
               <div className="ch-detail-val" style={{fontSize:'15px', lineHeight:'1.6', marginTop:'4px'}}>{renderText(ch.problem)}</div>
             </div>
             <div>
@@ -291,23 +313,39 @@ function ChallengeItem({ ch, forceOpen, onOpened }) {
 }
 
 export default function Challenges({ navIntent, clearNavIntent }) {
-  const [active, setActive] = useState('all')
-  const [diff, setDiff] = useState('all')
-  const [company, setCompany] = useState('all')
-  const [targetChallenge, setTargetChallenge] = useState(null)
+  const [active, setActive] = useUrlParam('cat', 'all')
+  const [diff, setDiff] = useUrlParam('diff', 'all')
+  const [company, setCompany] = useUrlParam('co', 'all')
+  const [qParam, setQParam] = useUrlParam('q', '')
+  const [catOpen, setCatOpen] = useState(false)
+  const [coOpen, setCoOpen] = useState(false)
+  const [hasScrolledToQ, setHasScrolledToQ] = useState(false)
 
+  // Parse `q=Lang-Id` into a target challenge for auto-expand.
+  const targetChallenge = (() => {
+    if (!qParam || hasScrolledToQ) return null
+    const sepIdx = qParam.indexOf('-')
+    if (sepIdx === -1) return null
+    const lang = qParam.slice(0, sepIdx)
+    const id = parseInt(qParam.slice(sepIdx + 1), 10)
+    if (Number.isNaN(id)) return null
+    return { id, lang }
+  })()
+
+  const activeCatItem = active === 'all' ? null : GROUPS.flatMap(g => g.items).find(i => i.id === active)
+
+  // Legacy nav-intent path (still used if anything pushes intent without going through URL).
+  // Now mostly redundant since SearchModal navigation writes URL params via App.navigate.
   useEffect(() => {
     if (!navIntent) return
     if (navIntent.category) setActive(navIntent.category)
     if (navIntent.diff) setDiff(navIntent.diff)
-    if (navIntent.challengeId) setTargetChallenge({ id: navIntent.challengeId, lang: navIntent.lang })
-    // clear any limiting filters that would hide the target
-    if (navIntent.challengeId) {
-      setDiff('all')
-      setCompany('all')
-    }
     clearNavIntent?.()
-  }, [navIntent, clearNavIntent])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navIntent])
+
+  // q stays in the URL after auto-scroll for shareability.
+  // hasScrolledToQ prevents re-scrolling on every render after the initial open.
 
   const dataset = active === 'all' ? ALL : GROUPS.flatMap(g=>g.items).find(i=>i.id===active)?.data || []
   const filtered = dataset
@@ -320,79 +358,140 @@ export default function Challenges({ navIntent, clearNavIntent }) {
 
   const taggedTotal = ALL.reduce((n,c) => n + (c.companies?.length ? 1 : 0), 0)
 
+  const companyLabelForChip =
+    company === 'all' ? null :
+    company === 'untagged' ? 'Untagged' :
+    COMPANY_LABELS[company]
+  const anyFilterActive = active !== 'all' || diff !== 'all' || company !== 'all'
+
   return (
     <div>
       <div className="section-title">Engineering Challenges</div>
-      <div className="section-subtitle">{ALL.length} challenges across {GROUPS.reduce((n,g)=>n+g.items.length,0)} topics · Click a category to filter</div>
+      <div className="section-subtitle">{ALL.length} challenges across {GROUPS.reduce((n,g)=>n+g.items.length,0)} topics</div>
 
-      {/* ALL button */}
-      <div style={{marginBottom:'8px'}}>
+      {/* Compact filter bar — single row by default */}
+      <div className="cmp-filter-bar">
         <button
-          className={`tab-btn${active==='all'?' active':''}`}
-          style={{fontSize:'13px',padding:'6px 18px'}}
-          onClick={()=>setActive('all')}
+          className={`cmp-chip${active==='all' && !catOpen ? ' active' : ''}`}
+          onClick={() => { setActive('all'); setCatOpen(false) }}
+          title="Show all challenges"
         >
           🌐 All {ALL.length}
         </button>
+
+        {activeCatItem ? (
+          <button
+            className="cmp-chip cmp-chip-active"
+            onClick={() => setActive('all')}
+            title="Clear category filter"
+          >
+            <span>{activeCatItem.icon}</span>
+            <span>{activeCatItem.label}</span>
+            <span className="cmp-chip-count">{activeCatItem.count}</span>
+            <span className="cmp-chip-x">✕</span>
+          </button>
+        ) : (
+          <button
+            className={`cmp-chip${catOpen ? ' open' : ''}`}
+            onClick={() => setCatOpen(o => !o)}
+          >
+            🎯 Browse categories <span className="cmp-chip-chevron">{catOpen ? '▴' : '▾'}</span>
+          </button>
+        )}
+
+        <span className="cmp-divider" />
+
+        <span className="cmp-label">Difficulty</span>
+        {['all','easy','medium','hard'].map(f => (
+          <button
+            key={f}
+            className={`cmp-pill${diff === f ? ' active' : ''}`}
+            onClick={() => setDiff(f)}
+          >
+            {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+
+        <span className="cmp-divider" />
+
+        {company !== 'all' ? (
+          <button
+            className="cmp-chip cmp-chip-active"
+            onClick={() => setCompany('all')}
+            title="Clear company filter"
+          >
+            <span>🏢 {companyLabelForChip}</span>
+            <span className="cmp-chip-x">✕</span>
+          </button>
+        ) : (
+          <button
+            className={`cmp-chip${coOpen ? ' open' : ''}`}
+            onClick={() => setCoOpen(o => !o)}
+          >
+            🏢 Company <span className="cmp-chip-chevron">{coOpen ? '▴' : '▾'}</span>
+          </button>
+        )}
+
+        {anyFilterActive && (
+          <button
+            className="cmp-reset"
+            onClick={() => { setActive('all'); setDiff('all'); setCompany('all'); setCatOpen(false); setCoOpen(false) }}
+          >
+            Reset
+          </button>
+        )}
       </div>
 
-      {/* Grouped category pills */}
-      <div className="cat-groups">
-        {GROUPS.map(g=>(
-          <div key={g.label} className="cat-group">
-            <div className="cat-group-label">{g.label}</div>
-            <div className="cat-group-items">
-              {g.items.map(item=>(
-                <button
-                  key={item.id}
-                  className={`cat-pill${active===item.id?' active':''}`}
-                  onClick={()=>setActive(item.id)}
-                >
-                  <span className="cat-pill-icon">{item.icon}</span>
-                  <span className="cat-pill-name">{item.label}</span>
-                  <span className="cat-pill-count">{item.count}</span>
-                </button>
-              ))}
+      {/* Expandable category panel */}
+      {catOpen && (
+        <div className="cat-groups cmp-expand">
+          {GROUPS.map(g => (
+            <div key={g.label} className="cat-group">
+              <div className="cat-group-label">{g.label}</div>
+              <div className="cat-group-items">
+                {g.items.map(item => (
+                  <button
+                    key={item.id}
+                    className={`cat-pill${active === item.id ? ' active' : ''}`}
+                    onClick={() => { setActive(item.id); setCatOpen(false) }}
+                  >
+                    <span className="cat-pill-icon">{item.icon}</span>
+                    <span className="cat-pill-name">{item.label}</span>
+                    <span className="cat-pill-count">{item.count}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Company filter */}
-      <div className="filter-bar" style={{marginTop:'16px'}}>
-        <span style={{fontSize:'10px', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--text-muted)', alignSelf:'center', marginRight:6}}>Company</span>
-        <button className={`filter-btn${company==='all'?' active':''}`} onClick={()=>setCompany('all')}>All</button>
-        {COMPANIES.map(co => (
-          <button key={co} className={`filter-btn${company===co?' active':''}`} onClick={()=>setCompany(co)}>
-            {COMPANY_LABELS[co]}
-            <span style={{marginLeft:'4px',opacity:.6,fontSize:'11px'}}>
-              ({dataset.filter(c => c.companies?.includes(co)).length})
-            </span>
+      {/* Expandable company panel */}
+      {coOpen && company === 'all' && (
+        <div className="cmp-expand cmp-company-row">
+          {COMPANIES.map(co => {
+            const count = dataset.filter(c => c.companies?.includes(co)).length
+            return (
+              <button
+                key={co}
+                className="cmp-pill"
+                onClick={() => { setCompany(co); setCoOpen(false) }}
+              >
+                {COMPANY_LABELS[co]} <span className="cmp-pill-count">{count}</span>
+              </button>
+            )
+          })}
+          <button
+            className="cmp-pill"
+            onClick={() => { setCompany('untagged'); setCoOpen(false) }}
+          >
+            Untagged <span className="cmp-pill-count">{dataset.filter(c => !c.companies?.length).length}</span>
           </button>
-        ))}
-        <button className={`filter-btn${company==='untagged'?' active':''}`} onClick={()=>setCompany('untagged')}>
-          Untagged
-          <span style={{marginLeft:'4px',opacity:.6,fontSize:'11px'}}>
-            ({dataset.filter(c => !c.companies?.length).length})
-          </span>
-        </button>
-      </div>
+        </div>
+      )}
 
-      {/* Difficulty filter */}
-      <div className="filter-bar" style={{marginTop:'8px'}}>
-        <span style={{fontSize:'10px', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--text-muted)', alignSelf:'center', marginRight:6}}>Difficulty</span>
-        {['all','easy','medium','hard'].map(f=>(
-          <button key={f} className={`filter-btn${diff===f?' active':''}`} onClick={()=>setDiff(f)}>
-            {f.charAt(0).toUpperCase()+f.slice(1)}
-            {f!=='all' && <span style={{marginLeft:'4px',opacity:.6,fontSize:'11px'}}>
-              ({dataset.filter(c=>c.diff===f).length})
-            </span>}
-          </button>
-        ))}
-      </div>
-
-      <div style={{color:'var(--text-muted)',fontSize:'13px',marginBottom:'12px',marginTop:'12px'}}>
-        Showing {filtered.length} challenge{filtered.length!==1?'s':''} · {taggedTotal} of {ALL.length} questions tagged with FAANG sources
+      <div className="cmp-summary">
+        Showing <strong>{filtered.length}</strong> challenge{filtered.length!==1?'s':''} · {taggedTotal} of {ALL.length} questions have a company citation
       </div>
 
       <div className="challenge-list">
@@ -403,7 +502,7 @@ export default function Challenges({ navIntent, clearNavIntent }) {
               key={`${ch.lang}-${ch.id}`}
               ch={ch}
               forceOpen={matched}
-              onOpened={matched ? () => setTargetChallenge(null) : undefined}
+              onOpened={matched ? () => setHasScrolledToQ(true) : undefined}
             />
           )
         })}

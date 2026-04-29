@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useRole, ROLES, ROLE_LABELS } from '../context/RoleContext'
 import { useTheme } from '../context/ThemeContext'
+import LogoMark from './LogoMark'
 
 function ThemeToggle() {
   const { theme, toggle } = useTheme()
@@ -149,7 +150,10 @@ export default function Nav({ sections, moreSections = [], activeSection, onNavi
   const isMac = typeof navigator !== 'undefined' && /Mac/.test(navigator.platform)
   return (
     <nav className="nav">
-      <div className="nav-brand">CRACKED</div>
+      <div className="nav-brand">
+        <LogoMark size={22} className="nav-brand-mark" />
+        <span className="nav-brand-text">CRACKED</span>
+      </div>
       {sections.map(s => (
         <button
           key={s.id}

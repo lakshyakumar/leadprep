@@ -1,20 +1,20 @@
 # Contributing to CRACKED
 
-Thanks for wanting to improve this project! Contributions of all kinds are welcome — new challenges, fixes, UI improvements, new topic areas, and **FAANG company tags on existing questions**.
+Thanks for wanting to improve this project! Contributions of all kinds are welcome — new challenges, fixes, UI improvements, new topic areas, and **company tags on existing questions** (MAANG + startups).
 
 ## What You Can Contribute
 
 | Type | Examples |
 |---|---|
 | **New challenges** | Add questions to existing categories or propose a new category |
-| **FAANG tags** | Tag an existing question with the company that asks it (with a citation) |
+| **Company tags** | Tag an existing question with the company that asks it (with a citation) |
 | **Content fixes** | Typos, outdated info, broken links in Standards |
 | **UI improvements** | Better mobile layout, accessibility, new components |
 | **New categories** | A whole new challenge topic (e.g. GraphQL, Mobile, ML Ops) |
 
 ---
 
-## 🏷️ Tagging Questions with FAANG Companies
+## 🏷️ Tagging Questions with Companies (MAANG + Startups)
 
 Every challenge or question can be tagged with the company that asks it. Tags surface as filter buttons and small badges in the UI, so users can prep for a specific target company.
 

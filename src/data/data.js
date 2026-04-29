@@ -2127,6 +2127,112 @@ export const companyPlaybooks = [
       "Azure roles will dive deep on cloud-native patterns. Office roles dive into platform/SDK design. Match your prep to the org."
     ]
   },
+
+  // === Tier-1 Startups ===
+  { id: "stripe", name: "Stripe", icon: "💳", accent: "#8d85ff",
+    optimizes: "Production code quality, written communication, deep API/distributed-systems thinking. Less LeetCode, more real engineering.",
+    format: "5 rounds typical — 1 take-home (3-5 hours, real engineering problem), 1-2 coding pairs, 1 system design (often API-flavored), 1 'integration' (debug/extend existing code), 1 values/behavioral (Stripe Operating Principles).",
+    signature: "Idempotency, distributed transactions, payments correctness, API design (rate limits, pagination, webhooks), retries, financial state machines. Stripe loves real-world problems.",
+    behavioral: "Stripe Operating Principles: Users First, Move with Urgency and Focus, Trust and Amplify, Think Rigorously. Each gets at least one STAR story.",
+    tips: [
+      "Take the take-home seriously. Spend the full window. Include a TIMING.md / NOTES.md describing tradeoffs.",
+      "Stripe interviews involve real codebases — not whiteboard. Practice navigating, extending, and testing unfamiliar code.",
+      "API design questions are very common. Drill idempotency keys, retry semantics, error envelopes (RFC 7807), webhook signing.",
+      "Written communication matters more than at most companies. Long-form async is the default.",
+      "Comp is top-of-market cash + RSUs (post-IPO secondary). Less negotiation friction than MAANG."
+    ]
+  },
+  { id: "airbnb", name: "Airbnb", icon: "🏡", accent: "#ff7e85",
+    optimizes: "Code quality, design taste, cultural alignment with hospitality values. Frontend culture is strong; backend leans data-heavy.",
+    format: "5 rounds — 2 coding (Airbnb prefers to see clean code, not just optimal). 1 system design. 1 behavioral. 1 'cross-functional' / values round with a non-engineer.",
+    signature: "Search and ranking, geo-spatial queries, system design at marketplace scale, React performance for frontend roles, A/B experimentation patterns.",
+    behavioral: "Cultural values: Be a Host, Champion the Mission, Be a Cereal Entrepreneur, Embrace the Adventure. The cross-functional round is real — it's a culture-fit test, not a formality.",
+    tips: [
+      "Code QUALITY signal is strong. Variable names, function decomposition, edge case handling — all watched. Don't golf.",
+      "Frontend roles dive into React internals: rendering, state management, performance profiling. Deep.",
+      "System design problems often use Airbnb's domain (search, listings, booking). Read 'How Airbnb does X' engineering blog posts.",
+      "Cross-functional round: have answers about how you partner with PM/design that aren't generic. They check.",
+      "Compensation is competitive but not aggressive. Don't expect Stripe-level cash; equity has more upside if you believe in the IPO trajectory."
+    ]
+  },
+  { id: "uber", name: "Uber", icon: "🚕", accent: "#c8c8d0",
+    optimizes: "Distributed systems depth, real-time and geo-spatial reasoning, on-call mindset for marketplace systems.",
+    format: "4-5 rounds — 2 coding (LeetCode medium-hard), 1 system design (real Uber-shaped: dispatch, surge pricing, ETA), 1 behavioral, 1 hiring manager.",
+    signature: "Geo-spatial indexing (geohash, H3), real-time matching, dispatch algorithms, surge pricing system design, marketplace dynamics.",
+    behavioral: "Uber values shifted post-2017; current ones emphasize 'We Build Globally, Live Locally', accountability. Talk about ownership and on-call experience.",
+    tips: [
+      "System design will likely be marketplace/dispatch flavored. Drill: 'design Uber matching', 'design surge pricing', 'design ETA service'.",
+      "Geo-spatial questions show up often. Know geohash basics, R-tree, and Uber's H3 system at a high level.",
+      "Coding rounds are LeetCode-style — heavier on graphs and DP than Stripe/Airbnb.",
+      "On-call experience matters. Uber's services are real-time; 'I've been on-call' is a positive signal.",
+      "Compensation is solid but not top-of-market post-IPO. Negotiate base + equity refreshers."
+    ]
+  },
+  { id: "openai", name: "OpenAI", icon: "🧠", accent: "#2ed4a8",
+    optimizes: "Senior+ engineers comfortable at the research-engineering boundary. Speed of execution. Comfort with ambiguity at the cutting edge.",
+    format: "Fast loop — usually 4-5 rounds compressed into 1-2 weeks. Coding (Python heavy), ML systems design (model serving, training infra, eval), behavioral, hiring manager. Some teams add a take-home.",
+    signature: "Distributed training infrastructure, GPU efficiency, model serving at scale, eval harness design, RAG patterns, agent infrastructure. Python-heavy day-to-day.",
+    behavioral: "Mission-aligned: 'why OpenAI?' must be substantive. They look for people who push limits and ship fast — slower-paced engineers struggle.",
+    tips: [
+      "Senior+ only in practice. New grads / junior engineers rarely get past resume screen.",
+      "Don't BS the ML knowledge. Demonstrate real understanding of transformers, attention, scaling laws — even for non-research roles.",
+      "Speed signal is huge. They want to see fast prototyping + good intuition for what matters first.",
+      "Pay is exceptional (PPU + cash). Don't anchor on tech-industry standards — ask for what the role's worth there.",
+      "Their interviewers are often top engineers. Treat conversations as a peer-level technical exchange, not a test."
+    ]
+  },
+  { id: "anthropic", name: "Anthropic", icon: "📜", accent: "#e09b7a",
+    optimizes: "Engineering with a safety/alignment mindset. Long-form thinking. Comfort with research uncertainty. Less 'move fast and break things'; more 'move thoughtfully and don't break things'.",
+    format: "4-5 rounds — coding (Python), systems design (often interpretability or eval-flavored), values/safety round (substantive — not just culture-fit theater), hiring manager.",
+    signature: "LLM serving infra, RLHF infrastructure, eval design (MMLU, ARC, etc.), constitutional AI patterns, safety research engineering.",
+    behavioral: "Safety values are real. Be ready to articulate WHY safety matters, not just that it does. Reading Anthropic's published research helps.",
+    tips: [
+      "Read at least 2-3 Anthropic papers (Constitutional AI, Sparse Autoencoders, Claude system card) before interviewing.",
+      "Code quality + thoughtfulness > raw speed. Different from OpenAI's vibe.",
+      "Take-home or extended coding session is common. Treat as a real engineering problem; document tradeoffs.",
+      "The values round will probe how you'd handle a safety-vs-shipping conflict. Don't say 'I'd defer to leadership' — have an actual position.",
+      "Comp is competitive, equity is private (RSUs convert at next round/IPO). Smaller cash than OpenAI."
+    ]
+  },
+  { id: "databricks", name: "Databricks", icon: "🔥", accent: "#ff7864",
+    optimizes: "Distributed systems and data infrastructure depth. Spark internals. Strong CS fundamentals. Production-quality code.",
+    format: "5 rounds — 2 coding (algorithm + systems-flavored), 1 system design (data platform scale), 1 behavioral, 1 hiring manager. Sometimes a 'project' deep-dive on resume.",
+    signature: "Distributed compute (Spark, Photon), columnar storage, query optimization, data lake architecture (Delta, Iceberg), streaming systems.",
+    behavioral: "Data-driven culture. Bring quantified outcomes from past roles. They probe ownership and customer impact heavily.",
+    tips: [
+      "If you've worked with Spark/Hadoop/Flink, lean into it. Otherwise, study Spark RDD/DataFrame model + Photon engine basics.",
+      "System design problems are 'design X at petabyte scale' flavored. Practice scaling reasoning.",
+      "Coding rounds are LeetCode medium-hard with a systems flavor (e.g., implement a small query optimizer).",
+      "Resume deep-dive is common — be ready to discuss any past project at depth.",
+      "Comp is high; pre-IPO equity has been on the runway for years. Discount it appropriately in your offer math."
+    ]
+  },
+  { id: "coinbase", name: "Coinbase", icon: "🪙", accent: "#5183ff",
+    optimizes: "Security-conscious engineering, financial system correctness, regulatory awareness. Now public — interviewing has matured toward Big Tech style.",
+    format: "5 rounds — 2 coding, 1 system design (often blockchain or financial flavored), 1 behavioral, 1 hiring manager.",
+    signature: "Crypto custody, transaction reconciliation, blockchain integration, distributed key management, financial-grade idempotency.",
+    behavioral: "Mission alignment ('build an open financial system') matters. They probe ethical thinking around regulation, custody, and risk.",
+    tips: [
+      "Brush up on crypto basics — public/private keys, signing, blockchain transactions, gas. Even non-blockchain roles are expected to understand the domain.",
+      "Security-mindedness shows in coding rounds. Think about input validation, replay attacks, key management — even when not asked.",
+      "System design problems lean financial: design a wallet, an exchange order book, custody systems. Practice these specifically.",
+      "Regulatory awareness is a soft signal — talk about what 'compliant' means in any system you've built.",
+      "Public-company comp now (RSUs vest at market price). Less startup-like; negotiate like a Big Tech offer."
+    ]
+  },
+  { id: "doordash", name: "DoorDash", icon: "🛵", accent: "#ff7560",
+    optimizes: "Marketplace systems, real-time dispatch, A/B testing rigor, data-driven product engineering.",
+    format: "4-5 rounds — 2 coding (LeetCode medium), 1 system design (marketplace-shaped), 1 behavioral, 1 hiring manager.",
+    signature: "Dispatch algorithms, ETA prediction, marketplace pricing, real-time location updates, supply-demand balancing, experimentation infrastructure.",
+    behavioral: "Operational rigor: 'what metric did you move?', 'how did you measure?', 'what was the A/B result?'. Vague qualitative answers don't land.",
+    tips: [
+      "System design is marketplace-flavored. Practice: 'design DoorDash matching', 'design surge', 'design ETA prediction'.",
+      "Always quantify. 'I improved X' is weak; 'I improved X by N% measured via A/B test of Y' is what they want.",
+      "Coding rounds are standard LeetCode medium — don't over-prepare hard graph problems.",
+      "Mid-onsite, you may get a hiring manager fit chat. Have specific questions about the team's roadmap.",
+      "Compensation is solid public-company package. Comparable to mid-tier Big Tech."
+    ]
+  },
 ];
 
 // Career-stage content: pre-application (recruiter screens, take-homes), negotiation, and the first 90 days on the job.
